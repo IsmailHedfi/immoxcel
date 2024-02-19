@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<body class="">
+
+		<main class="main-content mt-0 ps">
+			<div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg" style=" background-position: top;"></div>
+			<div class="container">
+				<div class="row mt-lg-n10 mt-md-n11 mt-n10 justify-content-center">
+					<div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
+						<div class="card z-index-0">
+							<div class="card-header text-center pt-4">
+								<h5>Add a leave</h5>
+							</div>
+
+							<div class="card-body">
+								{{ form_start(formAdd,{'attr': {'novalidate': 'novalidate'}}) }}
+								<div class="mb-3">
+									<label for="example-text-input" class="form-control-label">LeaveType</label>
+									{{form_widget(formAdd.LeaveType, {'attr': {'class': 'form-control','placeholder':"LeaveType"}}) }}
+									{{ form_errors(formAdd.LeaveType) }}
+								</div>
+								<div class="mb-3">
+									<label for="example-text-input" class="form-control-label">StartDate</label>
+									{{form_widget(formAdd.StartDate, {'attr': {'class': 'form-control','placeholder':"StartDate"}}) }}
+									{{ form_errors(formAdd.StartDate) }}
+								</div>
+								<div class="mb-3">
+									<label for="example-text-input" class="form-control-label">FinishDate</label>
+									{{form_widget(formAdd.FinishDate, {'attr': {'class': 'form-control','placeholder':"FinishDate"}}) }}
+									{{ form_errors(formAdd.FinishDate) }}
+								</div>
+								<div class="text-center">
+									{{ form_widget(formAdd.save, {'attr': {'class': "btn bg-gradient-dark w-100 my-4 mb-2"}}) }}
+								</div>
+
+								{{ form_end(formAdd) }}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+				<div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+			</div>
+			<div class="ps__rail-y" style="top: 0px; right: 0px;">
+				<div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
+			</div>
+		</main>
+
+
+	</body>
+{% endblock %}
