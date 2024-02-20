@@ -27,7 +27,7 @@
 											<label for="example-text-input" class="form-control-label">First name</label>
 											<br>
 											{{form_widget(formAdd.EmpName, {'attr': {'class': 'form-control','placeholder':"Employee's name"}}) }}
-											{{ form_errors(formAdd.EmpName) }}
+                                            {{ form_errors(formAdd.EmpName) }}
 										</div>
 									</div>
 									<div class="col-md-6">
@@ -35,7 +35,7 @@
 											<label for="example-text-input" class="form-control-label">Last name</label>
 											<br>
 											{{form_widget(formAdd.EmpLastName, {'attr': {'class': 'form-control','placeholder':"Employee's last name"}}) }}
-											{{ form_errors(formAdd.EmpLastName) }}
+                                            {{ form_errors(formAdd.EmpLastName) }}
 										</div>
 									</div>
 									<div class="col-md-6">
@@ -43,7 +43,15 @@
 											<label for="example-text-input" class="form-control-label">Sex</label>
 											<br>
 											{{form_widget(formAdd.EmpSex,{'attr':{'class':'form-control','placeholder':"Employee's sex"}}) }}
-											{{ form_errors(formAdd.EmpSex) }}
+                                            {{ form_errors(formAdd.EmpSex) }}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">Birthday Date</label>
+											<br>
+											{{form_widget(formAdd.birthDate,{'attr':{'class':'form-control','placeholder':"Employee's birthday"}}) }}
+                                            {{ form_errors(formAdd.birthDate) }}
 										</div>
 									</div>
 									<div class="col-md-6">
@@ -51,7 +59,7 @@
 											<label for="example-text-input" class="form-control-label">Email address</label>
 											<br>
 											{{form_widget(formAdd.EmpEmail,{'attr':{'class':'form-control','placeholder':"Employee's email"}})}}
-											{{ form_errors(formAdd.EmpEmail) }}
+                                            {{ form_errors(formAdd.EmpEmail) }}
 										</div>
 									</div>
 									<div class="col-md-6">
@@ -59,7 +67,47 @@
 											<label for="example-text-input" class="form-control-label">Function</label>
 											<br>
 											{{form_widget(formAdd.EmpFunction,{'attr':{'class':'form-control','placeholder':"Employee's function"}})}}
-											{{ form_errors(formAdd.EmpFunction) }}
+                                            {{ form_errors(formAdd.EmpFunction) }}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">Hire Date</label>
+											<br>
+											{{form_widget(formAdd.hireDate,{'attr':{'class':'form-control','placeholder':"Employee's hire date"}}) }}
+                                            {{ form_errors(formAdd.hireDate) }}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">End Contract Date</label>
+											<br>
+											{{form_widget(formAdd.endContractDate,{'attr':{'class':'form-control','placeholder':"Employee's end contract date"}}) }}
+                                            {{ form_errors(formAdd.endContractDate) }}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">Leave days allowed</label>
+											<br>
+        										{{ formAdd.vars.data.allowedLeaveDays }}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">Contract type</label>
+											<br>
+											{{form_widget(formAdd.contractType,{'attr':{'class':'form-control','placeholder':"Employee's contract type"}}) }}
+                                            {{ form_errors(formAdd.contractType) }}
+										</div>
+									</div>
+									
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">CV</label>
+											<br>
+											{{form_widget(formAdd.Empcv,{'attr':{'class':'form-control','placeholder':"Employee's cv"}}) }}
+                                            {{ form_errors(formAdd.Empcv) }}
 										</div>
 									</div>
 								</div>
@@ -71,7 +119,7 @@
 											<label for="example-text-input" class="form-control-label">Address</label>
 											<br>
 											{{form_widget(formAdd.EmpAddress,{'attr':{'class':'form-control','placeholder':"Employee's address"}})}}
-											{{ form_errors(formAdd.EmpAddress) }}
+                                            {{ form_errors(formAdd.EmpAddress) }}
 										</div>
 									</div>
 									<div class="col-md-4">
@@ -79,7 +127,7 @@
 											<label for="example-text-input" class="form-control-label">Phone Number</label>
 											<br>
 											{{form_widget(formAdd.EmpPhone,{'attr':{'class':'form-control','placeholder':"Employee's phone number"}})}}
-											{{ form_errors(formAdd.EmpPhone) }}
+                                            {{ form_errors(formAdd.EmpPhone) }}
 										</div>
 									</div>
 								</div>

@@ -40,10 +40,10 @@ class Employees
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"Employee's phone number is required")]
-    /*#[Assert\Regex(
-        pattern: "/^\+(?:[0-9] ?){6,14}[0-9]$/",
+    #[Assert\Regex(
+        pattern: "'/^\+(?:[0-9] ?){6,14}[0-9]$/'",
         message: "Please enter a valid phone number."
-    )]*/
+    )]
     private ?string $EmpPhone = null;
 
     #[ORM\Column(length: 255)]

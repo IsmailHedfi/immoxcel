@@ -10,18 +10,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\Employees;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+
 
 class AddLeaveType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('Status', ChoiceType::class, [
+            ->add('Status',HiddenType::class, [], ChoiceType::class, [
                 'choices' => [
                     'Pending'=>'Pending',
                     'Approved' => 'Approved',
                     'Disapproved' => 'Disapproved',
-                ]], null, [
+                ]],null, [
                     'empty_data' => '', // Default value for EmpName if left empty
                 ]
             )
@@ -49,10 +51,16 @@ class AddLeaveType extends AbstractType
                     // Customize how the employee entity is displayed as a choice
                     return $employee->getID(); // Assuming there's a method to get the employee's full name
                 },
+                'attr' => [
+                    'style' => 'display: none;', // Hide the field
+                ],
+                'label_attr' => [
+                    'style' => 'display: none;', // Hide the label
+                ],  
                 // You can also add other options as needed
-            ], null, [
+            ],null, [
                 'empty_data' => '', // Default value for EmpName if left empty
-            ])
+            ] )
             ->add('save',SubmitType::class,[
                 'label' => 'ADD'
                 ])

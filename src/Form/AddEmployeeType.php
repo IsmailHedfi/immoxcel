@@ -10,6 +10,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+
 
 class AddEmployeeType extends AbstractType
 {
@@ -75,6 +77,8 @@ class AddEmployeeType extends AbstractType
                 'choices' => [
                     '--' => '',
                     'CIVP' => 'CIVP',
+                    'CSC' => 'CSC',
+                    'KARAMA' => 'KARAMA',
                     'CDI' => 'CDI',
                     'Autre' => 'Autre',
                 ],
@@ -86,7 +90,9 @@ class AddEmployeeType extends AbstractType
                 , null, [
                 'empty_data' => '', // Default value for EmpName if left empty
             ])
-            ->add('allowedLeaveDays', null, [
+            ->add('allowedLeaveDays',HiddenType::class, [
+                'empty_data' => 0, // Default value for EmpName if left empty
+            ], null, [
                 'empty_data' => 0, // Default value for EmpName if left empty
             ])
             ->add('save', SubmitType::class);

@@ -42,6 +42,25 @@ class EmployeesController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() ){
             var_dump("cbonnnnnnnnnnYYYYYYYYYYYYYYYYYYYYY");
+            switch($form->get('contractType')->getData()){
+                case 'CIVP':
+                    $employee->setAllowedLeaveDays(12) ;
+                    break;
+                case 'KARAMA':
+                    $employee->setAllowedLeaveDays(20) ;
+                    break;
+                case 'CSC':
+                    $employee->setAllowedLeaveDays(25) ;
+                    break;
+                case 'CDI':
+                    $employee->setAllowedLeaveDays(30) ;
+                    break;
+                case 'Autre':
+                    $employee->setAllowedLeaveDays(15) ;
+                    break;
+
+            }
+            var_dump("cbonnnnnnnnnn");
             if($form->isValid()){            var_dump("cbonnnnnnnnnn");
 
            // $en=$this->getDoctrine()->getManager();
