@@ -1,0 +1,25 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+display_materials:
+  path: /materials
+  controller: App\Controller\MaterialsController::index
+display_addmaterials:
+  path: /addmaterials
+  controller: App\Controller\MaterialsController::addmaterials
+display_affichermaterials:
+  path: /affichermaterials
+  controller: App\Controller\MaterialsController::affichermaterials
+display_editmaterials:
+  path: /editmaterials/{id}
+  controller: App\Controller\MaterialsController::editmaterials
+display_deletematerials:
+  path: /deletematerials/{id}
+  controller: App\Controller\MaterialsController::deletematerials
+display_depot:
+  path: /depot
+  controller: App\Controller\DepotController::index
+display_adddepot:
+  path: /adddepot
+  controller: App\Controller\DepotController::adddepot
+  
