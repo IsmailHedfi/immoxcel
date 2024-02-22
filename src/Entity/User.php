@@ -28,6 +28,14 @@ class User implements UserInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Employees $Employee = null;
 
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Email cannot be blank")]
+    #[Assert\Regex(
+        pattern: "/^\w+(\.\w+)*@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/",
+        message: "The email '{{ value }}' is not a valid email address."
+    )]
+    private ?string $Email = null;
+
     
     
     public function getId(): ?int
@@ -81,7 +89,7 @@ class User implements UserInterface
     public function getRoles(): array
     {
         // You can return an empty array if you don't have role-based access control
-        return [];
+        return [$this->Employee->getEmpFunction()];
     }
 
     public function getSalt(): ?string
@@ -93,5 +101,17 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // You can leave this method empty if you don't have sensitive data to erase
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->Email;
+    }
+
+    public function setEmail(string $Email): static
+    {
+        $this->Email = $Email;
+
+        return $this;
     }
 }

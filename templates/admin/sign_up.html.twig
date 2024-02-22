@@ -64,16 +64,19 @@
                     {{ form_widget(f.Employee,{'attr':{'class':'form-control'}}) }}
                 </div>
                 <div class="mb-3">
+                  {{ form_widget(f.Email,{'attr':{'class':'form-control', 'placeholder': 'Email'}}) }}
+                  {{ form_errors(f.Email,{'attr':{'class':'text-danger'}}) }}
+                </div>
+                <div class="mb-3">
                   {{ form_widget(f.Username,{'attr':{'class':'form-control', 'placeholder': 'Username'}}) }}
                   {{ form_errors(f.Username,{'attr':{'class':'text-danger'}}) }}
                 </div>
                 <div class="mb-3">
-                  {{ form_widget(f.Password.first, {'attr': {'class': 'form-control', 'type': 'password', 'placeholder': 'Password'}}) }}
-                  {{ form_errors(f.Password.first, {'attr': {'class': 'text-danger'}}) }}
+                  {{ form_widget(f.Password, {'attr': {'class': 'form-control', 'type': 'password', 'placeholder': 'Password'}}) }}
+                  {{ form_errors(f.Password, {'attr': {'class': 'text-danger'}}) }}
                 </div>
                 <div class="mb-3">
-                  {{ form_widget(f.Password.second, {'attr': {'class': 'form-control', 'type': 'password', 'placeholder': 'Confirm Password'}}) }}
-                  {{ form_errors(f.Password.second, {'attr': {'class': 'text-danger'}}) }}
+                  <input type="password" name="confirm_password" class="form-control" placeholder="Confirm Password">
                 </div>
                 <div class="text-center">
                     {{ form_widget(f.Add,{'label': 'Add User','attr':{'class':'btn bg-gradient-dark w-100 my-4 mb-2'}})}}

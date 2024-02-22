@@ -24,15 +24,9 @@
             <div class="collapse navbar-collapse" id="navigation">
               <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
-                  <a class="nav-link me-2" href="/sign_up">
-                    <i class="fas fa-user-circle opacity-6 text-dark me-1"></i>
-                    Sign Up
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link me-2" href="/login">
-                    <i class="fas fa-key opacity-6 text-dark me-1"></i>
-                    Sign In
+                  <a class="nav-link me-2" href="{{ path('display_home') }}">
+                    <i class="fa-solid fa-house-user opacity-6 text-dark me-1"></i>
+                    Home
                   </a>
                 </li>
               </ul>
@@ -45,7 +39,6 @@
   </div>
   <main class="main-content  mt-0">
    {{ form_start(f,{attr:{novalidate:'novalidate'}}) }}
-   
     <section>
       <div class="page-header min-vh-100">
         <div class="container">

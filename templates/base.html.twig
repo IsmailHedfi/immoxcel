@@ -9,6 +9,7 @@
         <link rel="icon" type="image/png" href="{{asset("../assets_dashboard/img/favicon.png")}}">
         {% block stylesheets %}
              <!--     Fonts and icons     -->
+             <link href="{{asset("../assets_dashboard/vendor/@fortawesome/fontawesome-free/css/all.min.css")}}" rel="stylesheet">
                 <link href="{{asset('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700')}}" rel="stylesheet" />
             <!-- Nucleo Icons -->
                 <link href="{{asset("../assets_dashboard/css/nucleo-icons.css")}}" rel="stylesheet" />
@@ -131,15 +132,21 @@
         {% block sidebar %}
         <script>
             function toggleMenu(menuIndex) {
-            var menuSub = document.querySelectorAll('.menu-sub')[menuIndex];
-            if (menuSub) {
-                if (menuSub.style.display === 'none' || menuSub.style.display === '') {
-                    menuSub.style.display = 'block';
-                } else {
-                menuSub.style.display = 'none';
-            }
+    var menuSub = document.querySelectorAll('.menu-sub')[menuIndex];
+    if (menuSub) {
+        if (menuSub.style.display === 'none' || menuSub.style.display === '') {
+            menuSub.style.display = 'block'; // Show the menu if hidden
+            setTimeout(() => {
+                menuSub.style.opacity = 1; // Fade in the menu after a short delay
+            }, 10);
+        } else {
+            menuSub.style.opacity = 0; // Fade out the menu
+            setTimeout(() => {
+                menuSub.style.display = 'none'; // Hide the menu after fading out
+            }, 300);
         }
     }
+}
 </script>
         <body class="g-sidenav-show   bg-gray-100">
         <div class="min-height-300 bg-primary position-absolute w-100"></div>
@@ -163,25 +170,27 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " onclick="toggleMenu(0)">
+          <a class="nav-link " onclick="toggleMenu(0)" style="display: flex; align-items: center;">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Employees</span>
+            <i class="ni ni-bold-down ms-auto"></i>
           </a>
-            <ul class="menu-sub" style="display: none; margin-left: 40px;">
+            <ul class="menu-sub" style="display: none; margin-left: 40px; transition: opacity 0.3s ease-in-out;">
                 <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Add Employee</a>
                 <li><a class="dropdown-item" href="#">Show Employees</a>
             </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link " onclick="toggleMenu(1)">
+          <a class="nav-link " onclick="toggleMenu(1)" style="display: flex; align-items: center;">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-app text-info text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Inventory</span>
+            <i class="ni ni-bold-down ms-auto"></i>
           </a>
-          <ul class="menu-sub" style="display: none; margin-left: 40px;">
+          <ul class="menu-sub" style="display: none; margin-left: 40px; transition: opacity 0.3s ease-in-out;">
                 <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Add Materials</a>
                 <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Add Depot</a>
                 <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Show Materials</a>
@@ -191,45 +200,74 @@
         
         <li class="nav-item">
         
-          <a class="nav-link" onclick="toggleMenu(2)">
+          <a class="nav-link" onclick="toggleMenu(2)"style="display: flex; align-items: center;">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-paper-diploma text-dark opacity-10" aria-hidden="true"></i>
             </div>
             <span class="nav-link-text ms-1">Projects</span>
+            <i class="ni ni-bold-down ms-auto"></i>
           </a>
-            <ul class="menu-sub" style="display: none; margin-left: 40px;">
+            <ul class="menu-sub" style="display: none; margin-left: 40px; transition: opacity 0.3s ease-in-out;">
                 <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Add Project</a>
                 <li><a class="dropdown-item" href="#">Show Project</a>
             </ul> 
         </li>
         
         <li class="nav-item">
-          <a class="nav-link" onclick="toggleMenu(3)">
+          <a class="nav-link" onclick="toggleMenu(3)"style="display: flex; align-items: center;">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="ni ni-money-coins text-info opacity-10" aria-hidden="true"></i>
+                <i class="ni ni-credit-card text-danger opacity-10" aria-hidden="true"></i>
             </div>
-            <span class="nav-link-text ms-1">Finance</span>
+            <span class="nav-link-text ms-1">Transactions</span>
+            <i class="ni ni-bold-down ms-auto"></i>
           </a>
-            <ul class="menu-sub" style="display: none; margin-left: 40px;">
-                <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Add Bill</a>
-                <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Add Invoice</a>
-                <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Add Sell</a>
-                <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Add Purchase</a>
-                <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Show Bills</a>
-                <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Show Invoices</a>
-                <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Show Purchases</a>
-                <li><a class="dropdown-item" href="#">Add Sells</a>
+            <ul class="menu-sub" style="display: none; margin-left: 40px; transition: opacity 0.3s ease-in-out;">
+                <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Add Transaction</a>
+                <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Show Transactions</a>
+            </ul> 
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" onclick="toggleMenu(4)"style="display: flex; align-items: center;">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="ni ni-shop text-dark opacity-10" aria-hidden="true"></i>
+            </div>
+            <span class="nav-link-text ms-1">Supplier</span>
+            <i class="ni ni-bold-down ms-auto"></i>
+          </a>
+            <ul class="menu-sub" style="display: none; margin-left: 40px; transition: opacity 0.3s ease-in-out;">
+                <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Add Supplier</a>
+                <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Show Suplliers</a>
+            </ul> 
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" onclick="toggleMenu(5)"style="display: flex; align-items: center;">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="ni ni-money-coins text-success opacity-10" aria-hidden="true"></i>
+            </div>
+            <span class="nav-link-text ms-1">Capital</span>
+            <i class="ni ni-bold-down ms-auto"></i>
+          </a>
+            <ul class="menu-sub" style="display: none; margin-left: 40px; transition: opacity 0.3s ease-in-out;">
+                <li style="margin-bottom: 10px;"><a class="dropdown-item" href="#">Show Capital</a>
             </ul> 
         </li>
         <li class="nav-item mt-3">
-          <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
+          <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account</h6>
         </li>
         <li class="nav-item">
           <a class="nav-link " href="/profile">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-badge text-dark text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Personal Information</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="{{ path('display_profile', {'id': app.session.get('user_id')}) }}">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Profile</span>
+            <span class="nav-link-text ms-1">User Information</span>
           </a>
         </li>
       </ul>

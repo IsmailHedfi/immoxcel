@@ -33,15 +33,8 @@ class UserType extends AbstractType
             ])
             
             ->add('Username')
-            ->add('Password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'invalid_message' => 'The password fields must match.',
-                'options' => ['attr' => ['class' => 'password-field']],
-                'required' => true,
-                'first_options'  => ['attr' => ['placeholder' => 'Password']],
-                'second_options' => ['attr' => ['placeholder' => 'Confirm Password']],
-                
-            ])
+            ->add('Email')
+            ->add('Password', PasswordType::class)
             ->add('Add',SubmitType::class)
             
         ;

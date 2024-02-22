@@ -25,4 +25,12 @@ delete_user:
 go_to_logout:
   path: /logout
   controller: App\Controller\UserController::logout
+
+display_home:
+  path: /home
+  controller: App\Controller\UserController::home
+
+display_work:
+  path: /work_in_progress
+  controller: App\Controller\UserController::work
     

@@ -17,7 +17,7 @@ class UpdateType extends AbstractType
     {
         $builder
             ->add('Username',TextType::class,['empty_data' => ''])
-            ->add('Password',PasswordType::class,['empty_data' => ''])
+            ->add('Email')
             ->add('Save',SubmitType::class)
         ;
     }

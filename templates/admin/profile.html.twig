@@ -68,12 +68,30 @@
                       {{ form_errors(f.Username) }}
                   </div>
                 </div>
-                
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="example-text-input" class="form-control-label">Email</label>
+                      {{ form_widget(f.Email,{'attr':{'class':'form-control'}}) }}
+                      {{ form_errors(f.Email) }}
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="example-text-input" class="form-control-label">Old Password</label>
+                    <input type="password" name="old_password" class="form-control">
+                    {% if error_old is defined %}
+                      <div class="error-message"style="color: red;">{{ error_old }}</div>
+                    {% endif %}
+                    
+                  </div>
+                </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">New Password</label>
-                    {{ form_widget(f.Password, {'attr': {'class': 'form-control', 'type': 'password', 'value': ''}}) }}
-                    {{ form_errors(f.Password) }}
+                    <input type="password" name="new_password" class="form-control">
+                    {% if error_new is defined %}
+                      <div class="error-message"style="color: red;">{{ error_new }}</div>
+                    {% endif %}
                   </div>
                 </div>
                 

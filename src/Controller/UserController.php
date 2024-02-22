@@ -16,15 +16,27 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Security;
 
 class UserController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
     #[Route('/dashboard', name: 'display_dashboard')]
     public function AdminDashboard(UserRepository $rep ,EmployeesRepository $rep1,SessionInterface $session)
     {
         $userid=$session->get('user_id');
+        if(!$userid){var_dump('null');}
         $user_to_show=$rep->find($userid);
         $username = $user_to_show->getUsername();
+        $isAdmin = $user_to_show->getEmployee()->getEmpFunction();
+        if ($isAdmin!='Admin') {
+            return $this->render('admin/access_denied.html.twig');
+        }
         $emp=$rep1->findAll();
         $users=$rep->findAll();
         $num_emp=count($emp);
@@ -43,9 +55,7 @@ class UserController extends AbstractController
     public function login(HttpFoundationRequest $request, UserRepository $userRep,UserPasswordEncoderInterface $passwordEncoder,SessionInterface $session)
     {
         $user1=new User();
-        // Create the login form
         $form = $this->createForm(LoginType::class);
-        // Handle form submission
         $form->handleRequest($request);
         
         if($form->isSubmitted()){
@@ -53,35 +63,54 @@ class UserController extends AbstractController
             $username=$form->get('Username')->getData();
             $password=$form->get('Password')->getData();
             $user=$userRepository->findOneBy(['Username' => $username]); 
-            var_dump($user->getEmployee()->getEmpFunction());
             
           if($user && $passwordEncoder->isPasswordValid($user, $password))
           {
-            $session->set('user_id', $user->getId());
-            return $this->redirectToRoute('display_admin');
+            $role=$user->getEmployee()->getEmpFunction();
+            if($role=="Admin"){
+                $session->set('user_id', $user->getId());
+                
+                return $this->redirectToRoute('display_admin');
+            }
+            else if($role!="Admin")
+            {
+                $session->set('user_id', $user->getId());
+                
+                return $this->redirectToRoute('display_work');
+            }
           }
-          else
+          else if(!$user)
           {
-            
+            $form->get('Username')->addError(new FormError('User not found'));
+          }
+          else 
+          {
+            $form->get('Username')->addError(new FormError('Wrong Username or Password'));
+            $form->get('Password')->addError(new FormError('Wrong Username or Password'));
           }
         }    
         
         return $this->render('admin/login.html.twig', ['f' => $form->createView()]);
     }
     
-    #[Route('/sign_up', name: 'display_sign_up')]
+    #[Route('/sign_up', name: 'display_admin_sign_up')]
     public function sign_up(HttpFoundationRequest $request, UserPasswordEncoderInterface $passwordEncoder,UserRepository $rep,SessionInterface $session)
     {
         $userid=$session->get('user_id');
         $user_to_show=$rep->find($userid);
         $username = $user_to_show->getUsername();
+        $isAdmin = $user_to_show->getEmployee()->getEmpFunction();
+        if ($isAdmin!='Admin') {
+            return $this->render('admin/access_denied.html.twig');
+        }
         $sign_up=new User();
         $form=$this->createForm(UserType::class,$sign_up);
-       
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
             {
-                
+                $ConfirmPassword=$request->request->get('confirm_password'); 
+                $Password=$form->get('Password')->getData();
+                if($ConfirmPassword===$Password){
                 $encodedPassword=$passwordEncoder->encodePassword($sign_up,$form->get('Password')->getData());
                
                 $sign_up->setPassword($encodedPassword);
@@ -89,6 +118,11 @@ class UserController extends AbstractController
                 $em->persist($sign_up);
                 $em->flush();
                 return $this->redirectToRoute('display_admin');
+                }
+                else
+                    {
+                        $form->get('Password')->addError(new FormError('Passwords must match'));
+                    }
             }
         return $this->render('admin/sign_up.html.twig', ['f'=>$form->createView(),'username'=>$username]);
     }
@@ -98,26 +132,46 @@ class UserController extends AbstractController
         $userid=$session->get('user_id');
         $user_to_show=$rep->find($userid);
         $username = $user_to_show->getUsername();
-        $profile=$rep->find($id);
-        $user=new User();
+        $userRepository = $this->getDoctrine()->getRepository(User::class);
+        $profile=$userRepository->find($id);
         $form=$this->createForm(UpdateType::class,$profile);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid())
-            {     
-                $newPassword = $form->get('Password')->getData();
-               
+        if($form->isSubmitted())
+            {  
+                $newPassword = $request->request->get('new_password'); 
+                $oldPassword = $request->request->get('old_password');
+                if(!empty($newPassword)&&!empty($oldPassword)){
+                if($passwordEncoder->isPasswordValid($profile, $oldPassword) && strlen($newPassword)>=8){
             
-                    $hashedPassword = $passwordEncoder->encodePassword($user, $newPassword);
+                    $hashedPassword = $passwordEncoder->encodePassword($profile, $newPassword);
                     $profile->setPassword($hashedPassword);
                     $entityManager=$this->getDoctrine()->getManager(); 
                     $entityManager->flush();
                     return $this->redirectToRoute('display_admin');
-                
+                }
+                else if(!$passwordEncoder->isPasswordValid($profile, $oldPassword))
+                    {
+                        $error_old = 'Wrong old Password';
+                            return $this->render('admin/profile.html.twig', ['f'=>$form->createView(),'error_old' => $error_old,'username'=>$username]);
+                    }
+                    else
+                    {
+                        $error_new = 'Password must be at least 8 characters long';
+                            return $this->render('admin/profile.html.twig', ['f'=>$form->createView(),'error_new' => $error_new,'username'=>$username]);
+                    }
+                }
+                else
+                {
+                    $profile->setPassword($profile->getPassword());
+                    $entityManager=$this->getDoctrine()->getManager(); 
+                    $entityManager->flush();
+                    return $this->redirectToRoute('display_admin');
+                }
             }
                
         return $this->render('admin/profile.html.twig', ['f'=>$form->createView(),'username'=>$username]);
     }
-    #[Route('/delete_User/{id}', name: 'delete_user')]
+    #[Route('/delete_User/{id}', name: 'delete_admin_user')]
         public function deleteUser($id,UserRepository $rep)
             {
                 $factory=$rep->find($id);
@@ -144,6 +198,21 @@ class UserController extends AbstractController
         $session->invalidate();
         
         // Redirect to the login page
-        return $this->redirectToRoute('display_login');
+        return $this->redirectToRoute('display_home');
+    }
+    #[Route('/home', name: 'display_home')]
+    public function home()
+    {
+        
+        return $this->render('admin/home.html.twig');
+    }
+    #[Route('/work_in_progress', name: 'display_work')]
+    public function work(SessionInterface $session)
+    {
+        $userid=$session->get('user_id');
+        $user_to_show=$this->getDoctrine()->getRepository(User::class)->find($userid);
+        $username = $user_to_show->getUsername();
+        
+        return $this->render('admin/work_in_progress.html.twig',['username'=>$username]);
     }
 }
