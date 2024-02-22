@@ -38,6 +38,9 @@ class Leaves
     #[Assert\NotBlank]
     private ?Employees $Employee = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $LeaveDescription = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -99,6 +102,18 @@ class Leaves
     public function setEmployee(?Employees $Employee): static
     {
         $this->Employee = $Employee;
+
+        return $this;
+    }
+
+    public function getLeaveDescription(): ?string
+    {
+        return $this->LeaveDescription;
+    }
+
+    public function setLeaveDescription(?string $LeaveDescription): static
+    {
+        $this->LeaveDescription = $LeaveDescription;
 
         return $this;
     }

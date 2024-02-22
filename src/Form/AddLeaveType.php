@@ -33,6 +33,9 @@ class AddLeaveType extends AbstractType
             ->add('FinishDate', null, [
                 'empty_data' => '', // Default value for EmpName if left empty
             ])
+            ->add('LeaveDescription', null, [
+                'empty_data' => '', // Default value for EmpName if left empty
+            ])
             ->add('LeaveType', ChoiceType::class, [
                 'choices' => [
                     '--'=>'',

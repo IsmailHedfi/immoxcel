@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Employees;
 use App\Form\AddEmployeeType;
 use App\Repository\EmployeesRepository;
+use App\Repository\LeavesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,12 +27,16 @@ class EmployeesController extends AbstractController
         ]);
     }
     #[Route('/employees', name: 'app_employees')]
-    public function index(EmployeesRepository $eR): Response
+    public function index(EmployeesRepository $eR,LeavesRepository $lR): Response
     {
+        $numberofemployees=$eR->countEmployees();
         $employees=$eR->findAll();
+        $leaves=$lR->findAll();
         return $this->render('employees/index.html.twig', [
             'controller_name' => 'EmployeesController',
-            'employees'=>$employees
+            'numberofemployees'=> $numberofemployees,
+            'employees'=>$employees,
+            'leaves'=>$leaves
         ]);
     }
     #[Route('/addEmployee', name: 'app_employee_add')]
@@ -60,7 +65,9 @@ class EmployeesController extends AbstractController
                     break;
 
             }
+            $employee->setEmpTakenLeaves(0);
             var_dump("cbonnnnnnnnnn");
+            var_dump($employee->getEmpPhone());
             if($form->isValid()){            var_dump("cbonnnnnnnnnn");
 
            // $en=$this->getDoctrine()->getManager();
