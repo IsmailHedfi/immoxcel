@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +33,14 @@ class Project
 
     #[ORM\Column(nullable: true)]
     private ?float $actual_cost = null;
+
+    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project')]
+    private Collection $listTasks;
+
+    public function __construct()
+    {
+        $this->listTasks = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -109,4 +119,37 @@ class Project
         return $this;
     }
 
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getListTasks(): Collection
+    {
+        return $this->listTasks;
+    }
+
+    public function addListTask(Task $listTask): static
+    {
+        if (!$this->listTasks->contains($listTask)) {
+            $this->listTasks->add($listTask);
+            $listTask->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeListTask(Task $listTask): static
+    {
+        if ($this->listTasks->removeElement($listTask)) {
+            // set the owning side to null (unless already changed)
+            if ($listTask->getProject() === $this) {
+                $listTask->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->getProjectName();
+    }
 }

@@ -36,11 +36,6 @@ class ProjectsController extends AbstractController
             return $this->redirectToRoute('app_projects');
         }
 
-        // Debugging: Check if form is submitted
-        if ($form->isSubmitted()) {
-            var_dump("Form submitted but not valid");
-        }
-
         // Get all existing projects
         $projects = $this->getDoctrine()->getRepository(Project::class)->findAll();
 
@@ -52,19 +47,28 @@ class ProjectsController extends AbstractController
     }
 
 
-    #[Route('/projects/edit', name: 'app_projects_edit')]
-    public function EditProject(Request $req,EntityManagerInterface $en,ProjectRepository $pR): Response
+
+    #[Route('/projects/edit/{id}', name: 'app_projects_edit')]
+    public function EditProject($id,Request $req,EntityManagerInterface $en,ProjectRepository $pR): Response
     {
-        $project=$pR->find(1);
+        $project=$pR->find($id);
         $form=$this->createForm(ProjectType::class,$project);
         //$form->add('submit', SubmitType::class);
         $form->handleRequest($req);
-
         if($form->isSubmitted()){
             $en->persist($project);
             $en->flush();
             return $this->redirectToRoute('app_projects');
         }
         return $this->renderForm('projects/Editproject.html.twig',['form'=>$form]);
+    }
+
+    #[Route('/projects/delete/{id}', name: 'app_projects_delete')]
+    public function deletecar($id,EntityManagerInterface $en,ProjectRepository $pR): Response
+    {
+        $project=$pR->find($id);
+        $en->remove($project);
+        $en->flush();
+        return $this->redirectToRoute('app_projects');
     }
 }

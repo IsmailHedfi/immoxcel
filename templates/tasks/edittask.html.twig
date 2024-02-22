@@ -132,54 +132,54 @@
 				<div class="card">
 					<div class="card-header pb-0">
 						<div class="d-flex align-items-center">
-							<p class="mb-0">Edit Project</p>
-{# here button #}
+							<p class="mb-0">Edit Task</p>
+							{# here button #}
 						</div>
 					</div>
 					<div class="card-body">
-						<p class="text-uppercase text-sm">Project information</p>
+						<p class="text-uppercase text-sm">Task information</p>
 						<form action="" class="formContainer">
 							{{ form_start(form) }}
 							<div class="row">
 								<div class="col-md-6">
 									<div class="form-group mb-4">
-										{{ form_label(form.projectName, null,{ 'label': 'Project Name' , 'label_attr': {'class': 'form-control-label label-style'}}) }}
-										{{ form_widget(form.projectName, {'attr': {'class': 'form-control input-border', 'type': 'text'}}) }}
+										{{ form_label(form.taskTitle, null,{ 'label': 'taskTitle' , 'label_attr': {'class': 'form-control-label label-style'}}) }}
+										{{ form_widget(form.taskTitle, {'attr': {'class': 'form-control input-border', 'type': 'text'}}) }}
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group mb-4">
-										{{ form_label(form.date_pred_start, null,{ 'label': 'Predicted Start Date', 'label_attr': {'class': 'form-control-label'}}) }}
-										{{ form_widget(form.date_pred_start, {'attr': {'class': 'form-control', 'type': 'text'}}) }}
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group mb-4">
-										{{ form_label(form.date_pred_finish, null,{ 'label': 'Predicted Finish Date', 'label_attr': {'class': 'form-control-label'}}) }}
-										{{ form_widget(form.date_pred_finish, {'attr': {'class': 'form-control', 'type': 'date'}}) }}
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group mb-4">
-										{{ form_label(form.date_completion, null,{ 'label': 'Completion Date', 'label_attr': {'class': 'form-control-label'}}) }}
-										{{ form_widget(form.date_completion, {'attr': {'class': 'form-control', 'type': 'date'}}) }}
+										{{ form_label(form.taskDescription, null,{ 'label': 'Task Description', 'label_attr': {'class': 'form-control-label'}}) }}
+										{{ form_widget(form.taskDescription, {'attr': {'class': 'form-control', 'type': 'text'}}) }}
 									</div>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-md-6">
 									<div class="form-group mb-4">
-										{{ form_label(form.actual_cost, null,{ 'label': 'Actual Cost', 'label_attr': {'class': 'form-control-label'}}) }}
-										{{ form_widget(form.actual_cost, {'attr': {'class': 'form-control position-static', 'type': 'number'}}) }}
+										{{ form_label(form.taskDeadline, null,{ 'label': 'Task Deadline', 'label_attr': {'class': 'form-control-label'}}) }}
+										{{ form_widget(form.taskDeadline, {'attr': {'class': 'form-control', 'type': 'date'}}) }}
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group mb-4">
-										{{ form_label(form.budget, null,{ 'label': 'Budget', 'label_attr': {'class': 'form-control-label'}}) }}
-										{{ form_widget(form.budget, {'attr': {'class': 'form-control is-invalid', 'type': 'number'}}) }}
-										{{ form_errors(form.budget) }}
+										{{ form_label(form.taskCompletionDate, null,{ 'label': 'Completion Date', 'label_attr': {'class': 'form-control-label'}}) }}
+										{{ form_widget(form.taskCompletionDate, {'attr': {'class': 'form-control', 'type': 'date'}}) }}
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group mb-4">
+										{{ form_label(form.taskStatus, null,{ 'label': 'Status', 'label_attr': {'class': 'form-control-label'}}) }}
+										{{ form_widget(form.taskStatus, {'attr': {'class': 'form-control position-static', 'type': 'text'}}) }}
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group mb-4">
+										{{ form_label(form.project, null,{ 'label': 'project', 'label_attr': {'class': 'form-control-label'}}) }}
+										{{ form_widget(form.project, {'attr': {'class': 'form-control', 'type': 'text'}}) }}
+										{{ form_errors(form.project) }}
 									</div>
 								</div>
 							</div>
@@ -630,7 +630,7 @@
 						<script>
 							document.write(new Date().getFullYear())
 						</script>,
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																													                made with
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																			                made with
 						<i class="fa fa-heart"></i>
 						by
 						<a href="/login" class="font-weight-bold" target="_blank">ImmoXcel</a>
