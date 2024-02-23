@@ -137,13 +137,13 @@
 				<div
 					class="row">
 					<!-- DATAAAAAAAA -->
-					<div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+					<div class="col-xl-3 col-sm-6 mb-xl-4 mb-4">
 						<div class="card">
 							<div class="card-body p-3">
 								<div class="row">
 									<div class="col-8">
 										<div class="numbers">
-											<p class="text-sm mb-0 text-uppercase font-weight-bold">Total number of employees</p>
+											<p class="text-sm mb-0 text-uppercase font-weight-bold">Employees number</p>
 											<h5 class="font-weight-bolder">
 												{{numberofemployees}}
 											</h5>
@@ -168,10 +168,6 @@
 											<h5 class="font-weight-bolder">
 												2,300
 											</h5>
-											<p class="mb-0">
-												<span class="text-success text-sm font-weight-bolder">+3%</span>
-												since last week
-											</p>
 										</div>
 									</div>
 									<div class="col-4 text-end">
@@ -193,10 +189,7 @@
 											<h5 class="font-weight-bolder">
 												+3,462
 											</h5>
-											<p class="mb-0">
-												<span class="text-danger text-sm font-weight-bolder">-2%</span>
-												since last quarter
-											</p>
+
 										</div>
 									</div>
 									<div class="col-4 text-end">
@@ -218,10 +211,6 @@
 											<h5 class="font-weight-bolder">
 												$103,430
 											</h5>
-											<p class="mb-0">
-												<span class="text-success text-sm font-weight-bolder">+5%</span>
-												than last month
-											</p>
 										</div>
 									</div>
 									<div class="col-4 text-end">
@@ -237,7 +226,7 @@
 				<!-- End DATAAAA -->
 				<!-- PENDING LEAVES -->
 				{% if leaves != null %}
-					<div class="card-group">
+					<div class="card-group ">
 						{% for leave in leaves %}
 							{% if leave.Status == "Pending" %}
 								<div class="card">
@@ -280,15 +269,17 @@
 										<!-- Your existing code for displaying leave details -->
 
 										<!-- Form to approve/disapprove leave -->
-											<form action="{{ path('update_leave_status') }}" method="POST"> <input type="hidden" name="leaveId" value="{{ leave.id }}">
-											<input type="hidden" name="status" value="Approved" id="leaveStatus{{ leave.id }}">
-											<button type="button" class="btn btn-success leave-action-button" onclick="updateLeaveStatus({{ leave.id }}, 'Approved')">Approve</button>
-										</form>
-										<form action="{{ path('update_leave_status') }}" method="POST">
-											<input type="hidden" name="leaveId" value="{{ leave.id }}">
-											<input type="hidden" name="status" value="Disapproved" id="leaveStatus{{ leave.id }}">
-											<button type="button" class="btn btn-danger leave-action-button" onclick="updateLeaveStatus({{ leave.id }}, 'Disapproved')">Disapprove</button>
-										</form>
+											<form action="{{ path('update_leave_status') }}" method="POST">
+    <input type="hidden" name="leaveId" value="{{ leave.id }}">
+    <input type="hidden" name="status" value="Approved" class="leave-status">
+    <button type="button" class="btn btn-success leave-action-button" data-leave-id="{{ leave.id }}" data-status="Approved">Approve</button>
+</form>
+
+<form action="{{ path('update_leave_status') }}" method="POST">
+    <input type="hidden" name="leaveId" value="{{ leave.id }}">
+    <input type="hidden" name="status" value="Disapproved" class="leave-status">
+    <button type="button" class="btn btn-danger leave-action-button" data-leave-id="{{ leave.id }}" data-status="Disapproved">Disapprove</button>
+</form>
 									</div>
 								</div>
 							{% endif %}
@@ -296,17 +287,34 @@
 					</div>
 				{% endif %}
 				<script>
-					function updateLeaveStatus(leaveId, status) { // Update the hidden input field value
-document.getElementById('leaveStatus' + leaveId).value = status;
-// Submit the form
-document.querySelector('form[action="  {{ path('update_leave_status') }}"]').submit();
-}
-				</script>
+    function updateLeaveStatus(button) {
+        var leaveId = button.dataset.leaveId;
+        var status = button.dataset.status;
+
+        var leaveStatusInput = button.parentElement.querySelector('.leave-status');
+        if (leaveStatusInput) {
+            leaveStatusInput.value = status;
+            // Submit the form
+            button.parentElement.submit();
+        } else {
+            console.error('Leave status input not found.');
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var buttons = document.querySelectorAll('.leave-action-button');
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                updateLeaveStatus(this);
+            });
+        });
+    });
+</script>
 				<!-- END PENDING LEAVES -->
 
 				<div class="row">
 					<div class="col-12">
-						<div class="card mb-4">
+						<div class="mt-4 card mb-4 mb-xl-4">
 							<div class="card-header pb-0">
 								<h6>Employees table</h6>
 							</div>
@@ -414,7 +422,7 @@ document.querySelector('form[action="  {{ path('update_leave_status') }}"]').sub
 									<script>
 										document.write(new Date().getFullYear())
 									</script>,
-									                made with
+																		                made with
 									<i class="fa fa-heart"></i>
 									by
 									<a href="/login" class="font-weight-bold" target="_blank">ImmoXcel</a>

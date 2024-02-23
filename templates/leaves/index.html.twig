@@ -3,18 +3,27 @@
 {% block title %}Hello LeavesController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div
+    class="card">
+    <!--This card is for the add project popup-->
+    <div class="formPopup" id="popupForm" class="modal">
+      <form action="/action_page.php" class="formContainer">
+        <button type="button" class="x button" onclick="closeForm()">x</button>
+        <h2>Create a project</h2>
+        <input type="text" class="form-control" id="name" placeholder="New project name.." name="name" required>
+        <table>
+          <tr>
+            <td>
+              <button type="submit" class="btn">Create</button>
+            </td>
+            <td>
+              <button type="button" class="btn cancel" onclick="closeForm()">Cancel</button>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+    <!--add project popup end-->
+  </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/ghali/Desktop/Fac3/S2/Pidev/immoxcel/src/Controller/LeavesController.php'|file_link(0) }}">src/Controller/LeavesController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/ghali/Desktop/Fac3/S2/Pidev/immoxcel/templates/leaves/index.html.twig'|file_link(0) }}">templates/leaves/index.html.twig</a></code></li>
-    </ul>
-</div>
 {% endblock %}

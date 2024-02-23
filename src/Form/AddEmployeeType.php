@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
@@ -69,7 +70,11 @@ class AddEmployeeType extends AbstractType
             
             ->add('hireDate', null, [
                 'empty_data' => '', // Default value for EmpName if left empty
+            ], DateType::class, [
+                'html5' => false,
+                'year'=>range(date('Y')-50,date('Y')+10)
             ])
+
             ->add('endContractDate', null, [
                 'empty_data' => '', // Default value for EmpName if left empty
             ])

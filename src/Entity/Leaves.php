@@ -117,4 +117,9 @@ class Leaves
 
         return $this;
     }
+    public function __construct()
+    {
+        $this->StartDate = new \DateTime();
+        $this->FinishDate = new \DateTime();
+    }
 }

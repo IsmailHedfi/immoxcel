@@ -40,10 +40,10 @@ class Employees
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"Employee's phone number is required")]
-    /*#[Assert\Regex(
-        pattern: "'/^\+(?:[0-9] ?){6,14}[0-9]$/'",
+    #[Assert\Regex(
+        pattern: "/^\d{8}$/",
         message: "Please enter a valid phone number."
-    )]*/
+    )]
     private ?string $EmpPhone = null;
 
     #[ORM\Column(length: 255)]
@@ -55,6 +55,12 @@ class Employees
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank(message:"Employee's birthday is required")]
+    #[Assert\Range(
+        min: "-90 years",
+        max: "-18 years",
+        minMessage: "Employee cannot be older than 90 years old",
+    maxMessage: "Employee must be at least 18 years old"
+    )]
     /*#[Assert\Expression(
         "value <= ('today') && value >= ('today -18 years')",
         message:"Employee must be at least 18 years old"
@@ -87,6 +93,7 @@ class Employees
     public function __construct()
     {
         $this->Leaves = new ArrayCollection();
+        $this->birthDate = new \DateTime('1990-01-01');
     }
 
     public function getId(): ?int

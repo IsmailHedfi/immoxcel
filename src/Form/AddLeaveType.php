@@ -67,6 +67,9 @@ class AddLeaveType extends AbstractType
             ->add('save',SubmitType::class,[
                 'label' => 'ADD'
                 ])
+                ->add('save',SubmitType::class,[
+                    'label' => 'ADD'
+                    ])
         ;
     }
 
