@@ -26,7 +26,7 @@ class ProjectsController extends AbstractController
         $form->handleRequest($request);
 
         // Check if form is submitted and valid, then save the new project
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             // Persist the project entity
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($project);
@@ -46,27 +46,43 @@ class ProjectsController extends AbstractController
         ]);
     }
 
+    #[Route('/Project/details/{id}', name: 'app_project_details')]
+    public function detailsTask($id, ProjectRepository $projectRepository): Response
+    {
+        $project = $projectRepository->find($id);
 
+        if (!$project) {
+            throw $this->createNotFoundException('The project does not exist');
+        }
+
+        // Get the project associated with the task
+        $tasks = $project->getListTasks();
+
+        return $this->render('projects/projectdetails.html.twig', [
+            'project' => $project,
+            'tasks' => $tasks,
+        ]);
+    }
 
     #[Route('/projects/edit/{id}', name: 'app_projects_edit')]
-    public function EditProject($id,Request $req,EntityManagerInterface $en,ProjectRepository $pR): Response
+    public function EditProject($id, Request $req, EntityManagerInterface $en, ProjectRepository $pR): Response
     {
-        $project=$pR->find($id);
-        $form=$this->createForm(ProjectType::class,$project);
+        $project = $pR->find($id);
+        $form = $this->createForm(ProjectType::class, $project);
         //$form->add('submit', SubmitType::class);
         $form->handleRequest($req);
-        if($form->isSubmitted()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $en->persist($project);
             $en->flush();
             return $this->redirectToRoute('app_projects');
         }
-        return $this->renderForm('projects/Editproject.html.twig',['form'=>$form]);
+        return $this->renderForm('projects/editproject.html.twig', ['form' => $form , 'project' => $project]);
     }
 
     #[Route('/projects/delete/{id}', name: 'app_projects_delete')]
-    public function deletecar($id,EntityManagerInterface $en,ProjectRepository $pR): Response
+    public function deletecar($id, EntityManagerInterface $en, ProjectRepository $pR): Response
     {
-        $project=$pR->find($id);
+        $project = $pR->find($id);
         $en->remove($project);
         $en->flush();
         return $this->redirectToRoute('app_projects');

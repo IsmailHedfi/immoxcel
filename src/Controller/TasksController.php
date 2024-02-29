@@ -67,8 +67,27 @@ class TasksController extends AbstractController
         }
     
         return $this->renderForm('tasks/edittask.html.twig', [
+            'task' => $task,
             'form' => $form,
             'project' => $project, // Pass the project to the template
+        ]);
+    }
+    #[Route('/Tasks/details/{id}', name: 'app_task_details')]
+    public function detailsTask($id,TaskRepository $taskRepository): Response
+    {
+        $task = $taskRepository->find($id);
+    
+        if (!$task) {
+            throw $this->createNotFoundException('The task does not exist');
+        }
+    
+        // Get the project associated with the task
+        $project = $task->getProject();
+    
+    
+        return $this->renderForm('tasks/taskdetails.html.twig', [
+            'project' => $project,
+            'task' => $task,// Pass the project to the template
         ]);
     }
     

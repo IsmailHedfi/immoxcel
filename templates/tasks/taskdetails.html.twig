@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+	<body class="g-sidenav-show   bg-gray-100"></body>
 	<main class="main-content position-relative border-radius-lg ">
 		<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur" data-scroll="false">
 			<div class="container-fluid py-1 px-3">
@@ -13,7 +14,7 @@
 					</ol>
 					<h6 class="font-weight-bolder text-white mb-0">Tables</h6>
 				</nav>
-				<div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar" data-np-autofill-form-type="other" data-np-checked="1" data-np-watching="1">
+				<div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
 					<div class="ms-md-auto pe-md-3 d-flex align-items-center">
 						<div class="input-group">
 							<span class="input-group-text text-body">
@@ -25,7 +26,7 @@
 					<ul class="navbar-nav  justify-content-end">
 						<li class="nav-item d-flex align-items-center">
 							<a href="javascript:;" class="nav-link text-white font-weight-bold px-0">
-								<i class="fa fa-user me-sm-1" aria-hidden="true"></i>
+								<i class="fa fa-user me-sm-1"></i>
 								<span class="d-sm-inline d-none">Sign In</span>
 							</a>
 						</li>
@@ -40,12 +41,12 @@
 						</li>
 						<li class="nav-item px-3 d-flex align-items-center">
 							<a href="javascript:;" class="nav-link text-white p-0">
-								<i class="fa fa-cog fixed-plugin-button-nav cursor-pointer" aria-hidden="true"></i>
+								<i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
 							</a>
 						</li>
 						<li class="nav-item dropdown pe-2 d-flex align-items-center">
 							<a href="javascript:;" class="nav-link text-white p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-								<i class="fa fa-bell cursor-pointer" aria-hidden="true"></i>
+								<i class="fa fa-bell cursor-pointer"></i>
 							</a>
 							<ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
 								<li class="mb-2">
@@ -60,7 +61,7 @@
 													from Laur
 												</h6>
 												<p class="text-xs text-secondary mb-0">
-													<i class="fa fa-clock me-1" aria-hidden="true"></i>
+													<i class="fa fa-clock me-1"></i>
 													13 minutes ago
 												</p>
 											</div>
@@ -79,7 +80,7 @@
 													by Travis Scott
 												</h6>
 												<p class="text-xs text-secondary mb-0">
-													<i class="fa fa-clock me-1" aria-hidden="true"></i>
+													<i class="fa fa-clock me-1"></i>
 													1 day
 												</p>
 											</div>
@@ -109,7 +110,7 @@
 													Payment successfully completed
 												</h6>
 												<p class="text-xs text-secondary mb-0">
-													<i class="fa fa-clock me-1" aria-hidden="true"></i>
+													<i class="fa fa-clock me-1"></i>
 													2 days
 												</p>
 											</div>
@@ -122,84 +123,74 @@
 				</div>
 			</div>
 		</nav>
-		<!--Navbar end-->
 		<div class="container-fluid py-4">
 			<div class="row">
-				<div class="col-md-4">
-					<div class="card ">
-
-						<div class="card-header d-flex justify-content-between align-items-center">
-							<h5 class="card-title">To Do</h5>
-							<button class="btn btn-primary" onclick="openForm()">+</button>
-							<script>
-								function openForm() {
-document.getElementById("popupForm").style.display = "block";
-}
-function closeForm() {
-document.getElementById("popupForm").style.display = "none";
-}
-							</script>
-						</div>
-						<div class="card-body">
-							{% for task in tasks %}
-								{% if task.taskStatus == 'To Do' %}
-									<div class="task mb-3 position-relative" >
-										<a href="{{ path('app_task_details', {'id': task.id}) }}">
-											<form method="post" action="{{ path('app_tasks_delete', {'id': task.id}) }}" onsubmit="return confirm('Are you sure you want to delete this task?');" class="text-center">
-												<button type="submit" class="delete-btn">x</button>
-											</form>
-											{{ task.taskTitle }}
-											<!-- Additional task details if needed -->
-										</a>
-									</div>
-								{% endif %}
-							{% endfor %}
+				<div class="card">
+					<div class="card-header pb-0">
+						<div class="d-flex align-items-center">
+							<p class="mb-0">Task Details</p>
+							<form method="post" action="{{ path('app_tasks_edit', {'id': task.id}) }}">
+								<button type="submit" class="btn">Edit</button>
+							</form>
 						</div>
 					</div>
-				</div>
-
-				<div class="col-md-4">
-					<div class="card">
-						<div class="card-header">
-							<h5 class="card-title">Doing</h5>
+					<div class="card-body">
+						<p class="text-uppercase text-sm">Task information</p>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group mb-4">
+									<label class="form-control-label label-style">Task Title:</label>
+									<p>{{ task.taskTitle }}</p>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group mb-4">
+									<label class="form-control-label">Task Description:</label>
+									<p>{{ task.taskDescription }}</p>
+								</div>
+							</div>
 						</div>
-						<div class="card-body">
-							{% for task in tasks %}
-								{% if task.taskStatus == 'Doing' %}
-									<div class="task mb-3 position-relative">
-										<a href="{{ path('app_task_details', {'id': task.id}) }}">
-											<form method="post" action="{{ path('app_tasks_delete', {'id': task.id}) }}" onsubmit="return confirm('Are you sure you want to delete this task?');" class="text-center">
-												<button type="submit" class="delete-btn">x</button>
-											</form>
-											{{ task.taskTitle }}
-											<!-- Additional task details if needed -->
-										</a>
-									</div>
-								{% endif %}
-							{% endfor %}
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group mb-4">
+									<label class="form-control-label">Task Deadline:</label>
+									<p>{{ task.taskDeadline|date('Y-m-d') }}</p>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group mb-4">
+									<label class="form-control-label">Completion Date:</label>
+									<p>{{ task.taskCompletionDate ? task.taskCompletionDate|date('Y-m-d') : 'Not completed yet' }}</p>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group mb-4">
+									<label class="form-control-label">Status:</label>
+									<p>{{ task.taskStatus }}</p>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group mb-4">
+									<label class="form-control-label">Project:</label>
+									<p>{{ task.project }}</p>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-
-				<div class="col-md-4">
-					<div class="card">
-						<div class="card-header">
-							<h5 class="card-title">Done</h5>
-						</div>
-						<div class="card-body">
-							{% for task in tasks %}
-								{% if task.taskStatus == 'Done' %}
-									<div class="task mb-3 position-relative">
-										<a href="{{ path('app_task_details', {'id': task.id}) }}">
-											<form method="post" action="{{ path('app_tasks_delete', {'id': task.id}) }}" onsubmit="return confirm('Are you sure you want to delete this task?');" class="text-center">
-												<button type="submit" class="delete-btn">x</button>
-											</form>
-											{{ task.taskTitle }}
-											<!-- Additional task details if needed -->
-										</a>
-									</div>
-								{% endif %}
-							{% endfor %}
+					<hr class="horizontal dark">
+					<p class="text-uppercase text-sm">Assignees</p>
+					<div class="row">
+						<div class="col-12">
+							<div class="card mb-4">
+								<div class="card-header pb-0">
+									<h6>Authors table</h6>
+								</div>
+								<div
+									class="card-body px-0 pt-0 pb-2"><!-- Table of employees -->
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -214,7 +205,7 @@ document.getElementById("popupForm").style.display = "none";
 							<script>
 								document.write(new Date().getFullYear())
 							</script>,
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																									                made with
+																																																																																																																																																																																																																																																																																																																																																										                made with
 							<i class="fa fa-heart"></i>
 							by
 							<a href="/login" class="font-weight-bold" target="_blank">immoxcel</a>
@@ -240,38 +231,5 @@ document.getElementById("popupForm").style.display = "none";
 				</div>
 			</div>
 		</footer>
-	</div>
-	<div class="formPopupX" id="popupForm">
-		<div
-			class="cardX">
-			<!-- This card is for the add project popup -->
-			<form action="{{ path('project_tasks', {'projectId': project.id}) }}" method="POST" class="formContainerX">
-				<button type="button" class="delete-btn" onclick="closeForm()">x</button>
-				<h2>Create a Task</h2>
-				{{ form_start(form) }}
-				{{ form_label(form.taskTitle, null, { 'label': 'Task Title', 'label_attr': {'class': 'form-control-label'}}) }}
-				{{ form_widget(form.taskTitle) }}
-				{{ form_label(form.taskDescription, null, { 'label': 'Task Description', 'label_attr': {'class': 'form-control-label' , 'type':'text-area'}}) }}
-				{{ form_widget(form.taskDescription) }}
-				<div hidden>
-					{{ form_widget(form.taskDeadline) }}
-					{{ form_widget(form.taskStatus, {'attr': {'value': 'To Do'}})}}
-					{{ form_widget(form.taskCompletionDate) }}
-					{{ form_widget(form.project) }}
-
-				</div>
-				<table>
-					<tr>
-						<td>
-							<button type="submit" class="buttonX">Create</button>
-						</td>
-						<td>
-							<button type="button" class="cancelX" onclick="closeForm()">CancelX</button>
-						</td>
-					</tr>
-				</table>
-				{{ form_end(form) }}
-			</form>
-		</div>
-	</div>
-</main>{% endblock %}
+	</main>
+</div>{% endblock %}

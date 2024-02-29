@@ -295,7 +295,7 @@ Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
 				<div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
 					<ul class="navbar-nav">
 						<li class="nav-item">
-							<a class="nav-link active" href="/materials">
+							<a class="nav-link active" href="{{ path('app_projects')}}">
 								<div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
 									<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
 								</div>
@@ -304,23 +304,15 @@ Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
 						</li>
 
 						<li class="nav-item">
-							<a class="nav-link " href="/affichermaterials">
+							<a class="nav-link " href="{{ path('app_projects')}}">
 								<div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
 									<i class="ni ni-credit-card text-success text-sm opacity-10"></i>
 								</div>
-								<span class="nav-link-text ms-1">Display Material</span>
+								<span class="nav-link-text ms-1">Projects</span>
 							</a>
 						</li>
 
 
-						<li class="nav-item">
-							<a class="nav-link " href="/addmaterials">
-								<div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-									<i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
-								</div>
-								<span class="nav-link-text ms-1">Add Materials</span>
-							</a>
-						</li>
 
 
 					</ul>

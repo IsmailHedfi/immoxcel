@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
@@ -17,21 +18,31 @@ class Project
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank (message : "Project Name required")]
     private ?string $projectName = null;
+   
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\NotBlank(message : "Predicted start date must be a valid date")]
     private ?\DateTimeInterface $date_pred_start = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\NotBlank(message : "Predicted finish date must be a valid date")]
+    #[Assert\GreaterThan(propertyPath : "date_pred_start", message : "Predicted finish date must be greater than the predicted start date")]
     private ?\DateTimeInterface $date_pred_finish = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\NotBlank(message : "Completion date must be a valid date")]
     private ?\DateTimeInterface $date_completion = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type(type : "float", message : "Budget must be a valid number")]
+    #[Assert\PositiveOrZero(message : "Budget cannot be negative")]
     private ?float $budget = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type(type : "float", message : "Actual cost must be a valid number")]
+    #[Assert\PositiveOrZero(message : "Actual cost cannot be negative")]
     private ?float $actual_cost = null;
 
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project')]
