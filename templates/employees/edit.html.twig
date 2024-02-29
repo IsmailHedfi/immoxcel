@@ -14,15 +14,12 @@
 				<div class="row">
 					<div class="col-md-8">
 
+						{{ form_start(formAdd,{'attr': {'novalidate': 'novalidate'}}) }}
 						<div class="card">
 							<div class="card-header pb-0">
 								<div class="d-flex align-items-center">
-
-									<p class="mb-0">Vue Profile</p>
-									<a class="btn btn-primary btn-sm ms-auto m-0" href="{{path('app_employee_edit',{'id': id}) }}">UPDATE</a>
-
+									<p class="mb-0">Edit Profile</p>
 								</div>
-								<div class="card-header pb-0 px-3"></div>
 							</div>
 							<div class="card-body">
 								<p class="text-uppercase text-sm">User Information</p>
@@ -31,63 +28,72 @@
 										<div class="form-group">
 											<label for="example-text-input" class="form-control-label">First name</label>
 											<br>
-											{{ formAdd.vars.data.EmpName}}
+											{{form_widget(formAdd.EmpName, {'attr': {'class': 'form-control','placeholder':"Employee's name"}}) }}
+											{{ form_errors(formAdd.EmpName) }}
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="example-text-input" class="form-control-label">Last name</label>
 											<br>
-											{{ formAdd.vars.data.EmpLastName}}
+											{{form_widget(formAdd.EmpLastName, {'attr': {'class': 'form-control','placeholder':"Employee's last name"}}) }}
+											{{ form_errors(formAdd.EmpLastName) }}
 										</div>
 									</div>
-									<div class="col-md-6">
+                                    <div class="col-md-6">
 										<div class="form-group">
 											<label for="example-text-input" class="form-control-label">Cin</label>
 											<br>
-											{{ formAdd.vars.data.EmpCin}}
+											{{form_widget(formAdd.EmpCin, {'attr': {'class': 'form-control','placeholder':"Employee's last name"}}) }}
+                                            {{ form_errors(formAdd.EmpCin) }}
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="example-text-input" class="form-control-label">Sex</label>
 											<br>
-											{{ formAdd.vars.data.EmpSex}}
+											{{form_widget(formAdd.EmpSex,{'attr':{'class':'form-control','placeholder':"Employee's sex"}}) }}
+											{{ form_errors(formAdd.EmpSex) }}
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="example-text-input" class="form-control-label">Birthday Date</label>
 											<br>
-											{{ formAdd.vars.data.birthDate|date('Y-m-d') }}
+											{{form_widget(formAdd.birthDate,{'attr':{'class':'form-control','placeholder':"Employee's birthday"}}) }}
+											{{ form_errors(formAdd.birthDate) }}
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="example-text-input" class="form-control-label">Email address</label>
 											<br>
-											{{ formAdd.vars.data.EmpEmail}}
+											{{form_widget(formAdd.EmpEmail,{'attr':{'class':'form-control','placeholder':"Employee's email"}})}}
+											{{ form_errors(formAdd.EmpEmail) }}
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="example-text-input" class="form-control-label">Function</label>
 											<br>
-											{{ formAdd.vars.data.EmpFunction}}
+											{{form_widget(formAdd.EmpFunction,{'attr':{'class':'form-control','placeholder':"Employee's function"}})}}
+											{{ form_errors(formAdd.EmpFunction) }}
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="example-text-input" class="form-control-label">Hire Date</label>
 											<br>
-											{{ formAdd.vars.data.hireDate|date('Y-m-d') }}
+											{{form_widget(formAdd.hireDate,{'attr':{'class':'form-control','placeholder':"Employee's hire date"}}) }}
+											{{ form_errors(formAdd.hireDate) }}
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="example-text-input" class="form-control-label">End Contract Date</label>
 											<br>
-											{{ formAdd.vars.data.endContractDate|date('Y-m-d') }}
+											{{form_widget(formAdd.endContractDate,{'attr':{'class':'form-control','placeholder':"Employee's end contract date"}}) }}
+											{{ form_errors(formAdd.endContractDate) }}
 										</div>
 									</div>
 									<div class="col-md-6">
@@ -101,7 +107,8 @@
 										<div class="form-group">
 											<label for="example-text-input" class="form-control-label">Contract type</label>
 											<br>
-											{{ formAdd.vars.data.contractType}}
+											{{form_widget(formAdd.contractType,{'attr':{'class':'form-control','placeholder':"Employee's contract type"}}) }}
+											{{ form_errors(formAdd.contractType) }}
 										</div>
 									</div>
 
@@ -109,7 +116,8 @@
 										<div class="form-group">
 											<label for="example-text-input" class="form-control-label">CV</label>
 											<br>
-											{{ formAdd.vars.data.Empcv}}
+											{{form_widget(formAdd.Empcv,{'attr':{'class':'form-control','placeholder':"Employee's cv"}}) }}
+											{{ form_errors(formAdd.Empcv) }}
 										</div>
 									</div>
 								</div>
@@ -120,32 +128,38 @@
 										<div class="form-group">
 											<label for="example-text-input" class="form-control-label">Address</label>
 											<br>
-											{{ formAdd.vars.data.EmpAddress}}
+											{{form_widget(formAdd.EmpAddress,{'attr':{'class':'form-control','placeholder':"Employee's address"}})}}
+											{{ form_errors(formAdd.EmpAddress) }}
 										</div>
 									</div>
 									<div class="col-md-4">
 										<div class="form-group">
 											<label for="example-text-input" class="form-control-label">Phone Number</label>
 											<br>
-											{{ formAdd.vars.data.EmpPhone}}
+											{{form_widget(formAdd.EmpPhone,{'attr':{'class':'form-control','placeholder':"Employee's phone number"}})}}
+											{{ form_errors(formAdd.EmpPhone) }}
 										</div>
 									</div>
 								</div>
 								<hr class="horizontal dark">
-
+								<div class="d-flex justify-content-end">
+									{{ form_widget(formAdd.save, {'attr': {'class': 'btn btn-primary btn-sm'}}) }}
+								</div>
 							</div>
 						</div>
+						{{ form_end(formAdd) }}
 					</div>
 
 					<!--
-																											-->
+																						-->
 					<div class="col-md-4">
 						<div class="card">
 							<div class="card-header pb-0 px-3">
 								<h6 class="mb-0">List of leaves</h6>
-
+								<a class="btn btn-primary btn-sm ms-auto" href="{{path('app_leave_add',{'id': id}) }}">ADD</a>
+								
 							</div>
-
+							
 							{% for leave in leaves %}
 								<div class="card-body pt-4 p-3">
 									<ul class="list-group">
@@ -182,7 +196,7 @@
 						</div>
 					</div>
 					<!--
-																												-->
+																							-->
 				</div>
 
 			</div>
@@ -195,7 +209,7 @@
 								<script>
 									document.write(new Date().getFullYear())
 								</script>,
-																                made with
+								                made with
 								<i class="fa fa-heart"></i>
 								by
 								<a href="/login" class="font-weight-bold" target="_blank">ImmoXcel</a>
@@ -221,7 +235,7 @@
 					</div>
 				</div>
 			</footer>
-
+			
 		</div>
 	</body>
 

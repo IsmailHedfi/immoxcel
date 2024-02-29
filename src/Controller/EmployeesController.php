@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+
 class EmployeesController extends AbstractController
 {
     #[Route('/land', name: 'app_landing')]
@@ -42,11 +43,11 @@ class EmployeesController extends AbstractController
     #[Route('/addEmployee', name: 'app_employee_add')]
     public function addEmployee(Request $request,EntityManagerInterface $en): Response
     {
+       
         $employee=new Employees();
         $form=$this->createForm(AddEmployeeType::class,$employee);
         $form->handleRequest($request);
         if($form->isSubmitted() ){
-            var_dump("cbonnnnnnnnnnYYYYYYYYYYYYYYYYYYYYY");
             switch($form->get('contractType')->getData()){
                 case 'CIVP':
                     $employee->setAllowedLeaveDays(12) ;
@@ -66,15 +67,15 @@ class EmployeesController extends AbstractController
 
             }
             $employee->setEmpTakenLeaves(0);
-            var_dump("cbonnnnnnnnnn");
-            var_dump($employee->getEmpPhone());
-            if($form->isValid()){            var_dump("cbonnnnnnnnnn");
+            if($form->isValid()){ 
 
            // $en=$this->getDoctrine()->getManager();
             $en->persist($employee);//Add
-            var_dump("cbonnnnnnnnnn");
             $en->flush();
-            return $this->redirectToRoute('app_employees');
+            $ok=1;
+           // $_SESSION['status'] = 'employee_added';
+            //var_dump($_SESSION['status']);
+            return $this->redirectToRoute('app_employees',['ok'=>$ok]);
         }}
         return $this->render('employees/add.html.twig',['formAdd'=>$form->createView()]);
     }
@@ -91,7 +92,7 @@ class EmployeesController extends AbstractController
             $en->flush();
             return $this->redirectToRoute('app_employees');
         }
-        return $this->render('employees/profile.html.twig',
+        return $this->render('employees/edit.html.twig',
             ['formAdd'=>$form->createView(),
              'leaves'=>$leaves,
              'id'=>$id
@@ -106,4 +107,26 @@ class EmployeesController extends AbstractController
         $en->flush();
         return $this->redirectToRoute('app_employees');  
     }
+
+    #[Route('/employee/{id}', name: 'app_employee_show')]
+    public function show($id,Request $request,EmployeesRepository $eR,LeavesRepository $lR): Response
+    {
+        $employee=$eR->find($id);
+        $leaves=$employee->getLeaves();
+        $form=$this->createForm(AddEmployeeType::class,$employee);
+        $form->handleRequest($request);
+        return $this->render('employees/profile.html.twig', [
+            'formAdd'=>$form->createView(),
+            'employees'=>$employee,
+            'leaves'=>$leaves,
+            'id'=>$id
+        ]);
+    }
+
+    #[Route('/email', name: 'app_email')]
+    public function email(): Response
+    {
+        return $this->render('employees/email.html');  
+    }
+
 }

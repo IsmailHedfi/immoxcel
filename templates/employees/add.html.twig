@@ -131,6 +131,11 @@
 			</nav>
 
 			<!-- End Navbar -->
+			{% if app.flashes('success') is not empty %}
+    <div class="alert alert-success" role="alert">
+        {{ app.flashes('success')[0] }}
+    </div>
+{% endif %}
 			<div class="container-fluid py-4">
 				<div class="row">
 					{{ form_start(formAdd,{'attr': {'novalidate': 'novalidate'}}) }}
@@ -158,6 +163,14 @@
 											<br>
 											{{form_widget(formAdd.EmpLastName, {'attr': {'class': 'form-control','placeholder':"Employee's last name"}}) }}
                                             {{ form_errors(formAdd.EmpLastName) }}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">Cin</label>
+											<br>
+											{{form_widget(formAdd.EmpCin, {'attr': {'class': 'form-control','placeholder':"Employee's last name"}}) }}
+                                            {{ form_errors(formAdd.EmpCin) }}
 										</div>
 									</div>
 									<div class="col-md-6">

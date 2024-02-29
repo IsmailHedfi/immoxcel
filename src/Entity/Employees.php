@@ -41,7 +41,7 @@ class Employees
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"Employee's phone number is required")]
     #[Assert\Regex(
-        pattern: "/^\d{8}$/",
+        pattern: "/^(9\d{7}|40\d{6}|41\d{6}|42\d{6}|44\d{6}|5[0-5]\d{6}|58\d{6}|2\d{7}|46\d{6})$/",
         message: "Please enter a valid phone number."
     )]
     private ?string $EmpPhone = null;
@@ -89,6 +89,14 @@ class Employees
 
     #[ORM\Column]
     private ?int $EmpTakenLeaves = 0;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank(message:"Employee's phone number is required")]
+    #[Assert\Regex(
+        pattern: "/^\d{8}$/",
+        message: "Please enter a valid cin."
+    )]
+    private ?string $EmpCin = null;
 
     public function __construct()
     {
@@ -296,6 +304,18 @@ class Employees
     public function setEmpTakenLeaves(?int $EmpTakenLeaves): static
     {
         $this->EmpTakenLeaves = $EmpTakenLeaves;
+
+        return $this;
+    }
+
+    public function getEmpCin(): ?string
+    {
+        return $this->EmpCin;
+    }
+
+    public function setEmpCin(?string $EmpCin): static
+    {
+        $this->EmpCin = $EmpCin;
 
         return $this;
     }
