@@ -100,6 +100,9 @@ class AddEmployeeType extends AbstractType
             ], null, [
                 'empty_data' => 0, // Default value for EmpName if left empty
             ])
+            ->add('EmpCin',null, [
+                'empty_data' => 0, // Default value for EmpName if left empty
+            ])
             ->add('save', SubmitType::class);
     }
 
