@@ -9,9 +9,11 @@ use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use SebastianBergmann\Environment\Console;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 class TasksController extends AbstractController
 {
@@ -50,22 +52,22 @@ class TasksController extends AbstractController
     public function editTask($id, Request $request, EntityManagerInterface $entityManager, TaskRepository $taskRepository): Response
     {
         $task = $taskRepository->find($id);
-    
+
         if (!$task) {
             throw $this->createNotFoundException('The task does not exist');
         }
-    
+
         // Get the project associated with the task
         $project = $task->getProject();
-    
+
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
             return $this->redirectToRoute('project_tasks', ['projectId' => $project->getId()]);
         }
-    
+
         return $this->renderForm('tasks/edittask.html.twig', [
             'task' => $task,
             'form' => $form,
@@ -73,39 +75,39 @@ class TasksController extends AbstractController
         ]);
     }
     #[Route('/Tasks/details/{id}', name: 'app_task_details')]
-    public function detailsTask($id,TaskRepository $taskRepository): Response
+    public function detailsTask($id, TaskRepository $taskRepository): Response
     {
         $task = $taskRepository->find($id);
-    
+
         if (!$task) {
             throw $this->createNotFoundException('The task does not exist');
         }
-    
+
         // Get the project associated with the task
         $project = $task->getProject();
-    
-    
+
+
         return $this->renderForm('tasks/taskdetails.html.twig', [
             'project' => $project,
-            'task' => $task,// Pass the project to the template
+            'task' => $task, // Pass the project to the template
         ]);
     }
-    
+
     #[Route('/task/delete/{id}', name: 'app_tasks_delete')]
     public function deleteTask($id, EntityManagerInterface $entityManager, TaskRepository $taskRepository): Response
     {
         $task = $taskRepository->find($id);
-    
+
         if (!$task) {
             throw $this->createNotFoundException('The task does not exist');
         }
-    
+
         // Get the project associated with the task
         $project = $task->getProject();
-    
+
         $entityManager->remove($task);
         $entityManager->flush();
-    
+
         return $this->redirectToRoute('project_tasks', ['projectId' => $project->getId()]);
     }
 
@@ -148,5 +150,31 @@ class TasksController extends AbstractController
             'project' => $project,
             'tasks' => $tasks,
         ]);
+    }
+
+    #[Route('/update-task-status', name: 'update_task_status', methods: ['POST'])]
+    public function updateTaskStatus(Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $taskId = $data['taskId']; // Get taskId instead of taskIds
+        $status = $data['status'];
+    
+        // Get the Doctrine entity manager
+        $entityManager = $this->getDoctrine()->getManager();
+    
+        // Fetch the task by its ID
+        $task = $entityManager->getRepository(Task::class)->find($taskId);
+    
+        // Update the status if the task is found
+        if ($task) {
+            $task->setTaskStatus($status);
+            $entityManager->flush(); // Flush changes to synchronize with the database
+    
+            // Return a JSON response indicating success
+            return new JsonResponse(['message' => 'Task status updated successfully'], Response::HTTP_OK);
+        } else {
+            // Return a JSON response indicating failure (task not found)
+            return new JsonResponse(['error' => 'Task not found'], Response::HTTP_NOT_FOUND);
+        }
     }
 }
