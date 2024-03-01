@@ -33,4 +33,20 @@ display_home:
 display_work:
   path: /work_in_progress
   controller: App\Controller\UserController::work
+
+verif_user:
+  path: /verif/{token}
+  controller: App\Controller\UserController::VerifyUser
+
+display_resend_verif:
+  path: /resend_verif/{id}
+  controller: App\Controller\UserController::resendVerif
+
+display_forgetPassword:
+  path: /forgetPassword
+  controller: App\Controller\UserController::forgottenPassword
+
+resetPass:
+  path: /resetPassword/{token}
+  controller: App\Controller\UserController::resetPassword
     

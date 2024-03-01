@@ -36,7 +36,11 @@ class User implements UserInterface
     )]
     private ?string $Email = null;
 
+    #[ORM\Column(type:'boolean')]
+    private $isVerified = false; 
     
+    #[ORM\Column(type:'string',length:255)]
+    private $resetToken;
     
     public function getId(): ?int
     {
@@ -111,6 +115,28 @@ class User implements UserInterface
     public function setEmail(string $Email): static
     {
         $this->Email = $Email;
+
+        return $this;
+    }
+    public function getIsVerified(): ?string
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $is_verif): static
+    {
+        $this->isVerified = $is_verif;
+
+        return $this;
+    }
+    public function getresetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setresetToken(string $token): static
+    {
+        $this->resetToken = $token;
 
         return $this;
     }

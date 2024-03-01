@@ -6,8 +6,14 @@ use App\Entity\User;
 use App\Form\UpdateType;
 use App\Form\UserType;
 use App\Form\LoginType;
+use App\Form\ResetPassType;
+use App\Form\ResetPasswordType;
 use App\Repository\EmployeesRepository;
 use App\Repository\UserRepository;
+use App\Service\JWTService;
+use App\Service\SendMailService;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
@@ -15,8 +21,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class UserController extends AbstractController
 {
@@ -66,6 +74,11 @@ class UserController extends AbstractController
             
           if($user && $passwordEncoder->isPasswordValid($user, $password))
           {
+            if($user->getIsVerified()==false)
+                {
+                    $this->addFlash('warning', 'Account not activated. <a href="' . $this->generateUrl('display_resend_verif', ['id' => $user->getId()]) . '">Resend activation link</a>');
+                }
+            else{
             $role=$user->getEmployee()->getEmpFunction();
             if($role=="Admin"){
                 $session->set('user_id', $user->getId());
@@ -77,6 +90,7 @@ class UserController extends AbstractController
                 $session->set('user_id', $user->getId());
                 
                 return $this->redirectToRoute('display_work');
+            }
             }
           }
           else if(!$user)
@@ -94,7 +108,7 @@ class UserController extends AbstractController
     }
     
     #[Route('/sign_up', name: 'display_admin_sign_up')]
-    public function sign_up(HttpFoundationRequest $request, UserPasswordEncoderInterface $passwordEncoder,UserRepository $rep,SessionInterface $session)
+    public function sign_up(HttpFoundationRequest $request,SendMailService $mail,JWTService $jwt, UserPasswordEncoderInterface $passwordEncoder,UserRepository $rep,SessionInterface $session)
     {
         $userid=$session->get('user_id');
         $user_to_show=$rep->find($userid);
@@ -103,26 +117,56 @@ class UserController extends AbstractController
         if ($isAdmin!='Admin') {
             return $this->render('admin/access_denied.html.twig');
         }
+        
         $sign_up=new User();
         $form=$this->createForm(UserType::class,$sign_up);
         $form->handleRequest($request);
+        
         if($form->isSubmitted() && $form->isValid())
             {
                 $ConfirmPassword=$request->request->get('confirm_password'); 
                 $Password=$form->get('Password')->getData();
-                if($ConfirmPassword===$Password){
-                $encodedPassword=$passwordEncoder->encodePassword($sign_up,$form->get('Password')->getData());
-               
-                $sign_up->setPassword($encodedPassword);
-                $em=$this->getDoctrine()->getManager();
-                $em->persist($sign_up);
-                $em->flush();
-                return $this->redirectToRoute('display_admin');
+                $username=$form->get('Username')->getData();
+                $userRepository = $this->getDoctrine()->getRepository(User::class);
+                $user=$userRepository->findOneBy(['Username' => $username]);
+                if($user){
+                
+                
+                    $form->get('Username')->addError(new FormError('Username already taken'));
+                
                 }
-                else
+                else{
+                    if($ConfirmPassword===$Password){
+                        $encodedPassword=$passwordEncoder->encodePassword($sign_up,$form->get('Password')->getData());
+                        $sign_up->setPassword($encodedPassword);
+                        $sign_up->setIsVerified(false);
+                        $sign_up->setresetToken('');
+                        $em=$this->getDoctrine()->getManager();
+                        $em->persist($sign_up);
+                        $em->flush();
+
+                        #Create Header
+                        $header=[
+                            'typ' => 'JWT',
+                            'alg' => 'HS256'
+                        ];
+
+                        #Create Payload
+                        $payload=[
+                            'user_id' => $sign_up->getId()
+                        ];
+
+                        #Generate Token
+                        $token=$jwt->generateToken($header,$payload,$this->getParameter('app.jwtservice'));
+                        #Send verification mail
+                        $mail->SendMail('noreply@ImmoXcel.com',$sign_up->getEmail(),'ImmoXcel Account Activiation','register',['user' => $sign_up ,'token' => $token]);
+                        return $this->redirectToRoute('display_admin');
+                }
+                else if($ConfirmPassword!=$Password)
                     {
                         $form->get('Password')->addError(new FormError('Passwords must match'));
                     }
+                }
             }
         return $this->render('admin/sign_up.html.twig', ['f'=>$form->createView(),'username'=>$username]);
     }
@@ -215,4 +259,112 @@ class UserController extends AbstractController
         
         return $this->render('admin/work_in_progress.html.twig',['username'=>$username]);
     }
+    #[Route('/verif/{token}', name: 'verif_user')]
+    public function VerifyUser($token,JWTService $jwt,UserRepository $User_rep,EntityManagerInterface $em,SessionInterface $session):Response
+    {
+        if($jwt->IsTokenValid($token) && !$jwt->isTokenExpired($token) 
+        && $jwt->VerifySignature($token,$this->getParameter('app.jwtservice')))
+            {
+                $payload=$jwt->getPayload($token);
+                $user=$User_rep->find($payload['user_id']);
+                if($user && !$user->getIsVerified())
+                    {
+                        $user->setIsVerified(true);
+                        $em->flush($user);
+                        $this->addFlash('success','Account Verified');
+                        return $this->redirectToRoute('display_login');
+                    }
+            }
+        $this->addFlash('danger','Invalid or Expired Token');
+        
+        return $this->redirectToRoute('display_login');
+    }
+
+    #[Route('/resend_verif/{id}', name: 'display_resend_verif')]
+    public function resendVerif(JWTService $jwt,UserRepository $User_rep,SendMailService $mail,SessionInterface $session,$id):response
+    {
+        $user=$User_rep->find($id);
+        #Create Header
+        $header=[
+            'typ' => 'JWT',
+            'alg' => 'HS256'
+        ];
+
+        #Create Payload
+        $payload=[
+            'user_id' => $id
+        ];
+
+        #Generate Token
+        $token=$jwt->generateToken($header,$payload,$this->getParameter('app.jwtservice'));
+
+        #Send verification mail
+        $mail->SendMail('noreply@ImmoXcel.com',$user->getEmail(),'ImmoXcel Account Activiation','register',['user' => $user ,'token' => $token]);
+        $this->addFlash('success','Validation Mail Sent Successfully');
+        return $this->redirectToRoute('display_login');   
+    }
+
+    #[Route('/forgetPassword', name: 'display_forgetPassword')]
+    public function forgottenPassword(HttpFoundationRequest $request,TokenGeneratorInterface $tokenGenrator,EntityManager $em,SendMailService $mail):response
+    {
+        $user=new User();
+        $form=$this->createForm(ResetPasswordType::class,$user);
+        $form->handleRequest($request);
+        if($form->isSubmitted())
+            {
+                $email=$form->get('Email')->getData();
+                $userRepository = $this->getDoctrine()->getRepository(User::class);
+                $user=$userRepository->findOneBy(['Email' => $email]);
+                if($user)
+                    {
+                        $token=$tokenGenrator->generateToken();
+                        $user->setresetToken($token);
+                        $em->persist($user);
+                        $em->flush();
+                        $url=$this->generateUrl('resetPass',['token' => $token],UrlGeneratorInterface::ABSOLUTE_URL);
+                        $context = [
+                            'url' => $url,
+                            'user' => $user
+                        ];
+                        $mail->SendMail('noreply@ImmoXcel.com',$user->getEmail(),'Reset Your Password','resetPasswordMail',$context);
+                        $this->addFlash('Success','Mail sent Seccessfully');
+                        return $this->redirectToRoute('display_login');
+                    }
+                $this->addFlash('danger','Probleme has been Occured');
+                $this->redirectToRoute('display_login');
+            }
+        return $this->render('admin/reset_password_request.html.twig',['f' => $form->createView()]);
+    }
+
+    #[Route('/resetPassword/{token}', name: 'resetPass')]
+    public function resetPassword(string $token,HttpFoundationRequest $request
+    , UserPasswordEncoderInterface $passwordEncoder,EntityManager $em
+    ):Response
+        {
+            $userRepository = $this->getDoctrine()->getRepository(User::class);
+            $user=$userRepository->findOneBy(['token' => $token]);
+            if($user)
+                {
+                    $form=$this->createForm(ResetPassType::class,$user);
+                    $form->handleRequest($request);
+                    if($form->isSubmitted())
+                        {
+                            $user->setresetToken('');
+                            $ConfirmPassword=$request->request->get('confirm_password'); 
+                            $Password=$form->get('Password')->getData();
+                            if($Password===$ConfirmPassword)
+                                {
+                                    $encodedPassword=$passwordEncoder->encodePassword($user,$Password);
+                                    $user->setPassword($encodedPassword);
+                                    $em->persist($user);
+                                    $em->flush();
+                                    $this->addFlash('Success','Password Updated');
+                                    return $this->redirectToRoute('display_login');
+                                }
+                        }
+                    return $this->render('admin/resetPassword.html.twig',['f' => $form->createView()]);
+                }
+            $this->addFlash('danger','invalid Token');
+            $this->redirectToRoute('display_login');
+        }
 }
