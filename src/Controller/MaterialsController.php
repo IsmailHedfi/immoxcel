@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Materials;
 use App\Form\MaterialsType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,7 +30,7 @@ class MaterialsController extends AbstractController
             $em=$this->getDoctrine()->getManager();
             $em->persist($materials);//add
             $em->flush();
-            return $this->redirectToRoute('display_materials');
+            return $this->redirectToRoute('display_affichermaterials');
         }
         return $this->render('materials/addmaterials.html.twig', ['f'=>$form->createView()]);
     }
@@ -69,4 +70,6 @@ class MaterialsController extends AbstractController
     
         return $this->redirectToRoute('display_affichermaterials');
     }
+
+
 }

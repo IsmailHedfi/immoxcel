@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+
+  <main class="main-content position-relative border-radius-lg ">
+    {% for depot in depots %}
+    {% set materialCount=depot.getMaterials()|length %}
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-12">
+          <div class="card mb-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="card-header pb-0">
+              <h6>Depot {{depot.getLocation()}}</h6>
+              <h6>Adresse: {{depot.getAdresse()}}</h6>
+              <h6>Limit Stock: {{depot.getLimitStock()}}</h6>
+            </div>
+            <div class="ms-auto text-end">
+                <a class="btn btn-link text-dark px-3 mb-0" href="{{ path('display_editdepot', {'id': depot.id}) }}">
+                    <i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit
+                </a>
+                <button class="btn btn-link text-dark text-sm mb-0 px-0 ms-4"><i class="fas fa-file-pdf text-lg me-1" aria-hidden="true"></i> PDF</button>
+                {% if materialCount > 0 %}
+                    <a class="btn btn-link text-danger text-gradient px-3 mb-0 disabled" href="#" disabled>
+                        <i class="far fa-trash-alt me-2"></i>Delete
+                    </a>
+                {% else %}
+                    <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="{{ path('display_deletedepot', {'id': depot.id}) }}">
+                        <i class="far fa-trash-alt me-2"></i>Delete
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Material Type</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Quantity</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Unit Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for material in depot.getMaterials() %}
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">{{material.getTypeMaterial()}}</h6>        
+                          </div>
+                        </div>
+                      </td>
+                     <td>
+                        <p class="text-xs text-secondary mb-0 font-weight-bold">{{material.getQuantity()}}</p>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="badge badge-sm bg-gradient-success">{{material.getUnitPrice()}}</span>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </main>
+  <div class="fixed-plugin">
+    <div class="card shadow-lg">
+      <div class="card-header pb-0 pt-3 ">
+        <div class="float-start">
+          <h5 class="mt-3 mb-0">Argon Configurator</h5>
+          <p>See our dashboard options.</p>
+        </div>
+        <div class="float-end mt-4">
+          <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
+            <i class="fa fa-close"></i>
+          </button>
+        </div>
+        <!-- End Toggle Button -->
+      </div>
+      <hr class="horizontal dark my-1">
+      <div class="card-body pt-sm-3 pt-0 overflow-auto">
+        <!-- Sidebar Backgrounds -->
+        <div>
+          <h6 class="mb-0">Sidebar Colors</h6>
+        </div>
+        <a href="javascript:void(0)" class="switch-trigger background-color">
+          <div class="badge-colors my-2 text-start">
+            <span class="badge filter bg-gradient-primary active" data-color="primary" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-dark" data-color="dark" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-info" data-color="info" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-success" data-color="success" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-warning" data-color="warning" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-danger" data-color="danger" onclick="sidebarColor(this)"></span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endblock %}

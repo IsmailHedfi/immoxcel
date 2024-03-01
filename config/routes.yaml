@@ -16,10 +16,21 @@ display_editmaterials:
 display_deletematerials:
   path: /deletematerials/{id}
   controller: App\Controller\MaterialsController::deletematerials
-display_depot:
-  path: /depot
-  controller: App\Controller\DepotController::index
+display_home:
+  path: /home
+  controller: App\Controller\DepotController::home
 display_adddepot:
   path: /adddepot
   controller: App\Controller\DepotController::adddepot
+display_afficherdepot:
+  path: /afficherdepot
+  controller: App\Controller\DepotController::afficherdepot
+display_editdepot:
+  path: /editdepot/{id}
+  controller: App\Controller\DepotController::editdepot
+display_deletedepot:
+  path: /deletedepot/{id}
+  controller: App\Controller\DepotController::deletedepot
+
+
   
