@@ -370,7 +370,12 @@ updateLeaveStatus(this);
 												{% endfor %}
 											</tbody>
 										</table>
+										
 									</div>
+									{# display navigation #}
+<div class="navigation">
+    {{ knp_pagination_render(employees,'pagination.html.twig') }}
+</div>
 								</div>
 							</div>
 						</div>
@@ -411,6 +416,7 @@ updateLeaveStatus(this);
 									{% endfor %}
 								</ul>
 							</div>
+							
 						</div>
 					</div>
 					<!-- END OLD LEAVES -->
@@ -451,7 +457,6 @@ updateLeaveStatus(this);
 						</div>
 					</footer>
 					<!-- NOTIFFFF -->
-		console.log(ok);
 			
 {% if app.request.get('ok') is not null %}
 	
@@ -475,6 +480,8 @@ ok=0;
 				</div>
 			</div>
 		</body>
+		
+
 	</body>
 	
 </div></body>{% endblock %}

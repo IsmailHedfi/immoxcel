@@ -32,7 +32,7 @@ class MailController extends AbstractController
         $mailer = new Mailer($transport);
         
         $mailer->send($email);
-        return $this->redirectToRoute('app_employee'); // Redirect to a success page after sending the email
+        return $this->redirectToRoute('app_employees'); // Redirect to a success page after sending the email
     
 }
         return $this->render('mail/index.html.twig', ['formAdd'=>$form->createView()]);

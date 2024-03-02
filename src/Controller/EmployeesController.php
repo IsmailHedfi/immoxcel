@@ -7,6 +7,7 @@ use App\Form\AddEmployeeType;
 use App\Repository\EmployeesRepository;
 use App\Repository\LeavesRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,10 +29,12 @@ class EmployeesController extends AbstractController
         ]);
     }
     #[Route('/employees', name: 'app_employees')]
-    public function index(EmployeesRepository $eR,LeavesRepository $lR): Response
+    public function index(EmployeesRepository $eR,LeavesRepository $lR,PaginatorInterface $paginator,Request $request): Response
     {
         $numberofemployees=$eR->countEmployees();
-        $employees=$eR->findAll();
+        $employeesdata=$eR->findAll();
+        $employees=$paginator->paginate($employeesdata,$request->query->getInt('page',1),4);
+
         $leaves=$lR->findAll();
         return $this->render('employees/index.html.twig', [
             'controller_name' => 'EmployeesController',
