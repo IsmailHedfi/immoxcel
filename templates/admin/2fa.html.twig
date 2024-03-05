@@ -3,7 +3,7 @@
 {% endblock %}
 {% block body %}
 <title>
-    ImmoXcel Login
+    ImmoXcel verification
   </title>
      <div class="container position-sticky z-index-sticky top-0">
     <div class="row">
@@ -47,25 +47,18 @@
             <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
               <div class="card card-plain">
                 <div class="card-header pb-0 text-start">
-                  <h4 class="font-weight-bolder">Sign In</h4>
-                  <p class="mb-0">Enter your username and password to sign in</p>
+                  <h4 class="font-weight-bolder">Verification</h4>
+                  <p class="mb-0">Enter your verification code</p>
                 </div>
                 <div class="card-body">
                   <form role="form">
                     <div class="mb-3">
-                      {{ form_widget(f.Username,{'attr':{'class':'form-control', 'placeholder': 'Username'}}) }}
-                      {{ form_errors(f.Username) }}
+                      {{ form_widget(f.verifCode,{'attr':{'class':'form-control', 'placeholder': 'Verification Code' ,'value':''}}) }}
+                      {{ form_errors(f.verifCode) }}
                     </div>
-                    <div class="mb-3">
-                      {{ form_widget(f.Password, {'attr': {'class': 'form-control', 'type': 'password', 'placeholder': 'Password'}}) }}
-                      {{ form_errors(f.Password, {'attr': {'class': 'text-danger'}}) }}
-                    </div>
-                    <div class="mb-3">
-                      <div class="g-recaptcha" data-sitekey="6LcOUYcpAAAAAPaBg_CFCI0z0Kv-ve0U5FHISU9L"></div>
-                    </div>
+                    
                     <div class="text-center">
-                      {{ form_widget(f.Add,{'label': 'Sign in','attr':{'class':'btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0'}})}}
-                      
+                      {{ form_widget(f.Send,{'label': 'Verif User','attr':{'class':'btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0'}})}}
                     </div>
                     {% for flashMessage in app.session.flashbag.get('warning') %}
     <div class="alert alert-warning">
@@ -98,7 +91,6 @@
     {{ form_errors(f) }}
     {{ form_end(f) }}
   </main>
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
    <script src="{{asset("https://kit.fontawesome.com/42d5adcbca.js")}}" crossorigin="anonymous"></script>
             <!--   Core JS Files   -->
                 <script src="{{asset("../assets_dashboard/js/core/popper.min.js")}}"></script>

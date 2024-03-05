@@ -49,4 +49,8 @@ display_forgetPassword:
 resetPass:
   path: /resetPassword/{token}
   controller: App\Controller\UserController::resetPassword
+
+2fa:
+  path: /2fa/{id}
+  controller: App\Controller\UserController::FA
     

@@ -71,8 +71,9 @@ class UserController extends AbstractController
             $username=$form->get('Username')->getData();
             $password=$form->get('Password')->getData();
             $user=$userRepository->findOneBy(['Username' => $username]); 
-            
-          if($user && $passwordEncoder->isPasswordValid($user, $password))
+            $recaptchaResponse = $request->request->get('g-recaptcha-response');
+            $recaptchaData = $this->verifyCaptcha($recaptchaResponse);
+          if($user && $passwordEncoder->isPasswordValid($user, $password)&& $recaptchaData->success)
           {
             if($user->getIsVerified()==false)
                 {
@@ -80,14 +81,18 @@ class UserController extends AbstractController
                 }
             else{
             $role=$user->getEmployee()->getEmpFunction();
+            $session->start();
+            $session->set('user',$user);
+            $session->set('user_id', $user->getId());
+            $session->set('role',$user->getEmployee()->getEmpFunction());
             if($role=="Admin"){
-                $session->set('user_id', $user->getId());
+                
                 
                 return $this->redirectToRoute('display_admin');
             }
             else if($role!="Admin")
             {
-                $session->set('user_id', $user->getId());
+               
                 
                 return $this->redirectToRoute('display_work');
             }
@@ -97,6 +102,10 @@ class UserController extends AbstractController
           {
             $form->get('Username')->addError(new FormError('User not found'));
           }
+          else if(!$recaptchaData->success)
+          {
+              $this->addFlash('warning', 'reCAPTCHA verification failed. Please try again.');
+          }
           else 
           {
             $form->get('Username')->addError(new FormError('Wrong Username or Password'));
@@ -105,6 +114,14 @@ class UserController extends AbstractController
         }    
         
         return $this->render('admin/login.html.twig', ['f' => $form->createView()]);
+    }
+
+    private function verifyCaptcha(string $recaptchaResponse): object
+    {
+        $recaptchaSecret = '6LcOUYcpAAAAANpKXcd5P0MIsRX5_x7N30RIlcD8'; // Replace with your reCAPTCHA secret key
+        $recaptchaVerifyUrl = 'https://www.google.com/recaptcha/api/siteverify';
+        $recaptchaVerifyResponse = file_get_contents($recaptchaVerifyUrl . '?secret=' . $recaptchaSecret . '&response=' . $recaptchaResponse);
+        return json_decode($recaptchaVerifyResponse);
     }
     
     #[Route('/sign_up', name: 'display_admin_sign_up')]
