@@ -373,9 +373,34 @@ updateLeaveStatus(this);
 																<i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
 														</td>
 														<td class="align-middle">
-															<a class="btn btn-link text-danger text-gradient px-3 mb-0" href="{{path('app_employee_delete',{'id':employee.id}) }}">
+															<a class="btn btn-link text-danger text-gradient px-3 mb-0 delete-button" href="{{path('app_employee_delete',{'id':employee.id}) }}">
 																<i class="far fa-trash-alt me-2" aria-hidden="true"></i>Delete</a>
+															</a>
 														</td>
+														<script>
+    document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default action of clicking the link
+            
+            // Display a confirmation dialog
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this employee!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    // If the user confirms deletion, proceed with the link action
+                    window.location.href = this.getAttribute('href');
+                } else {
+                    // If the user cancels deletion, do nothing
+                }
+            });
+        });
+    });
+</script>
 													</tr>
 												{% else %}
 													<div class="alert alert-primary" role="alert">
@@ -472,106 +497,115 @@ updateLeaveStatus(this);
 						</div>
 					</div>
 				</footer>
-				<!-- NOTIFFFF -->
+				<!-- NOTIFFFF add -->
 
 				{% if app.request.get('ok') is not null %}
+    <script>
+        // Display sweet alert
+        swal({
+            title: "Done!",
+            text: "Employee added successfully",
+            icon: "success",
+            timer: 3000, // 3 seconds
+        }).then(function() {
+           // $(".swal-modal").fadeOut();
+            window.location.href = '{{ path('app_employees') }}';
+        });
+    </script>
+{% endif %}
 
-					<script>
-						// Display sweet alert
-swal({
-title: "Good job!",
-text: "Employee added successfully",
-icon: "success",
-timer: 3000, // 3 seconds
-});
-// Set timer to close sweet alert after 3 seconds
-setTimeout(function () {
-$(".swal-modal").fadeOut();
-}, 3000);
-ok = 0;
-					</script>
-				{% endif %}
 
 
 			</div>
 		</div>
 	</body>
 
-	<script>
-		document.addEventListener('DOMContentLoaded', function () {
-const searchInput = document.getElementById('searchInput');
-const tableBody = document.querySelector('#listEmployees table tbody');
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const tableBody = document.querySelector('#listEmployees table tbody');
 
-searchInput.addEventListener('input', function () {
-const searchTerm = this.value.trim().toLowerCase();
-const url = '/search?search=' + searchTerm;
+        searchInput.addEventListener('input', function () {
+            const searchTerm = this.value.trim().toLowerCase();
+            const url = '/search?search=' + searchTerm;
 
-fetch(url).then(response => response.json())
-.then(data => { // Clear previous results
-tableBody.innerHTML = '';
+            fetch(url)
+            .then(response => response.json())
+            .then(data => { // Clear previous results
+                tableBody.innerHTML = '';
 
-if (data.length === 0) { // If no employees found, display a message
-tableBody.innerHTML = '    <div style="display: flex; justify-content: center;"><span class="badge bg-gradient-primary" >No employees Found</span></div>';
-} else { // Loop through each employee and create table rows
-data.forEach(employee => {
-const row = document.createElement('tr');
+                if (data.length === 0) { // If no employees found, display a message
+                    tableBody.innerHTML = '    <div style="display: flex; justify-content: center;"><span class="badge bg-gradient-primary" >No employees Found</span></div>';
+                } else { // Loop through each employee and create table rows
+                    data.forEach(employee => {
+                        const row = document.createElement('tr');
 
-// Insert employee data into table rows
-row.innerHTML = `
+                        // Insert employee data into table rows
+                        row.innerHTML = `
                             <td>
                                 <div class="d-flex px-2 py-1">
                                     <div>
-                                        <img src="${
-employee.EmpSex === 'Female' ? './female.png' : './male.png'
-}" class="avatar avatar-sm me-3" alt="user1">
+                                        <img src="${employee.EmpSex === 'Female' ? './female.png' : './male.png'}" class="avatar avatar-sm me-3" alt="user1">
                                     </div>
                                     <div class="d-flex flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm">${
-employee.EmpName.toUpperCase()
-} ${
-employee.EmpLastName
-}</h6>
-                                        <p class="text-xs text-secondary mb-0">${
-employee.EmpEmail
-}</p>
+                                        <h6 class="mb-0 text-sm">${employee.EmpName.toUpperCase()} ${employee.EmpLastName}</h6>
+                                        <p class="text-xs text-secondary mb-0">${employee.EmpEmail}</p>
                                     </div>
                                 </div>
                             </td>
                             <td class="align-middle text-center text-sm">
-                                <span class="badge badge-sm bg-gradient-success">${
-employee.EmpFunction
-}</span>
+                                <span class="badge badge-sm bg-gradient-success">${employee.EmpFunction}</span>
                             </td>
                             <td class="align-middle text-center">
-                                <span class="text-secondary text-xs font-weight-bold">${
-employee.EmpPhone
-}</span>
+                                <span class="text-secondary text-xs font-weight-bold">${employee.EmpPhone}</span>
                             </td>
                             <td class="align-middle">
-                                <a class="btn btn-link text-dark px-3 mb-0" href="/employee/${
-employee.id
-}">
+                                <a class="btn btn-link text-dark px-3 mb-0" href="/employee/${employee.id}">
                                     <i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit
                                 </a>
                             </td>
                             <td class="align-middle">
-                                <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="/deleteEmployee/${
-employee.id
-}">
+                                <a class="btn btn-link text-danger text-gradient px-3 mb-0 delete-button" href="/deleteEmployee/${employee.id}">
                                     <i class="far fa-trash-alt me-2" aria-hidden="true"></i>Delete
                                 </a>
                             </td>
                         `;
 
-// Append the row to the table body
-tableBody.appendChild(row);
-});
-}
-}).catch(error => {
-console.error('Error fetching employees:', error);
-});
-});
-});
-	</script>
+                        // Append the row to the table body
+                        tableBody.appendChild(row);
+
+                        // Add event listener for delete button
+                        const deleteButton = row.querySelector('.delete-button');
+                        deleteButton.addEventListener('click', function(event) {
+                            event.preventDefault(); // Prevent the default action of clicking the link
+                            const deleteUrl = this.getAttribute('href');
+
+                            // Display a confirmation dialog
+                            swal({
+                                title: "Are you sure?",
+                                text: "Once deleted, you will not be able to recover this employee!",
+                                icon: "warning",
+                                buttons: true,
+                                dangerMode: true,
+                            })
+                            .then((willDelete) => {
+                                if (willDelete) {
+                                    // If the user confirms deletion, proceed with the delete action
+                                    window.location.href = deleteUrl;
+                                } else {
+                                    // If the user cancels deletion, do nothing
+                                }
+                            });
+                        });
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching employees:', error);
+            });
+        });
+    });
+</script>
+
 
 </body></div></body>{% endblock %}
