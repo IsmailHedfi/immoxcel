@@ -9,6 +9,7 @@ use App\Repository\LeavesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -130,6 +131,40 @@ class EmployeesController extends AbstractController
     public function email(): Response
     {
         return $this->render('employees/email.html');  
+    }
+
+    #[Route('/search', name: 'app_search', methods:['GET'])]
+    public function search(Request $request, EmployeesRepository $eR): JsonResponse
+    {
+       // var_dump("famechhhh");
+
+        $searchTerm = $request->query->get('search');
+        $employees = $eR->findBySearchTerm($searchTerm);
+        //var_dump("am hereee");
+        $data = [];
+        foreach ($employees as $employee) {
+            $data[] = [
+                'id'=>$employee->getId(),
+                'EmpName' => $employee->getEmpName(),
+                'EmpLastName' => $employee->getEmpLastName(),
+                'EmpEmail' => $employee->getEmpEmail(),
+                'EmpFunction' => $employee->getEmpFunction(),
+                'EmpPhone' => $employee->getEmpPhone()
+
+
+            ];
+        }
+/*
+        if(empty($data)){
+            var_dump("famchiiiiii");
+        }
+        else{
+            var_dump("famaaa");
+            var_dump($data);
+
+        }
+*/
+        return new JsonResponse($data);
     }
 
 }

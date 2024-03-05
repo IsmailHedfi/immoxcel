@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Leaves;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -20,6 +21,21 @@ class LeavesRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Leaves::class);
     }
+
+    public function getLeaveDataByYear(): array
+{
+    $entityManager = $this->getEntityManager();
+    $query = $entityManager->createNativeQuery('
+        SELECT MONTH(l.start_date) AS month, YEAR(l.start_date) AS year, COUNT(l.id) AS count
+        FROM leaves l
+        WHERE YEAR(l.start_date) >= YEAR(CURRENT_DATE())
+        GROUP BY year, month
+        ORDER BY year ASC, month ASC
+    ', new ResultSetMapping());
+
+    return $query->getResult();
+}
+
 
 //    /**
 //     * @return Leaves[] Returns an array of Leaves objects

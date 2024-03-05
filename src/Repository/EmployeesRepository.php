@@ -29,6 +29,29 @@ class EmployeesRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function findBySearchTerm($searchTerm)
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.EmpName LIKE :term')
+            ->orWhere('e.EmpLastName LIKE :term')
+            ->orWhere('e.EmpFunction LIKE :term')
+            ->setParameter('term', '%' . $searchTerm . '%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getHiringData(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e.hireDate AS month, COUNT(e.id) AS count')
+            ->groupBy('month')
+            ->orderBy('month', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    
+
 //    /**
 //     * @return Employees[] Returns an array of Employees objects
 //     */
