@@ -36,6 +36,17 @@ class LeavesRepository extends ServiceEntityRepository
     return $query->getResult();
 }
 
+public function getApprovedLeaveCountByType()
+    {
+        return $this->createQueryBuilder('l')
+            ->select('l.LeaveType, COUNT(l) as count')
+            ->where('l.Status = :Status')
+            ->setParameter('Status', 'Approved')
+            ->groupBy('l.LeaveType')
+            ->getQuery()
+            ->getResult();
+    }
+
 
 //    /**
 //     * @return Leaves[] Returns an array of Leaves objects

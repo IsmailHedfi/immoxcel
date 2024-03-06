@@ -422,8 +422,11 @@ updateLeaveStatus(this);
 					</div>
 				</div>
 				<!-- OLD LEAVES -->
+						<div class="row">
+
 				<div class="col-lg-4">
 					<div class="card h-100">
+					<div class="mt-4 card mb-4 mb-xl-4">
 						<div class="card-header pb-0 p-3">
 							<div class="row">
 								<div class="col-6 d-flex align-items-center">
@@ -457,11 +460,77 @@ updateLeaveStatus(this);
 								{% endfor %}
 							</ul>
 						</div>
-
+					</div>
 					</div>
 				</div>
 				<!-- END OLD LEAVES -->
 
+				<!--STATISTICS-->
+
+
+				<div class="col-lg-4">
+					<div class="card h-100">
+						<div>
+        <canvas id="employeeChart" width="400" height="400"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('employeeChart').getContext('2d');
+        var employeeCounts = {{ employeeCounts|json_encode|raw }};
+        
+        var labels = [];
+        var data = [];
+        var backgroundColors = []; // Define an array to hold custom background colors
+        
+        // Define custom background colors for each function
+        var customColors = [
+            'rgba(255, 99, 132, 0.5)',
+            'rgba(54, 162, 235, 0.5)',
+            'rgba(255, 206, 86, 0.5)',
+            'rgba(75, 192, 192, 0.5)',
+			'rgba(251, 99, 64, 0.5)',
+            'rgba(94, 114, 228, 0.5)',
+
+            // Add more colors as needed
+        ];
+        
+        employeeCounts.forEach(function(item, index) {
+            labels.push(item.EmpFunction); // Use EmpFunction attribute
+            data.push(item.count);
+            backgroundColors.push(customColors[index % customColors.length]); // Ensure colors are cycled
+        });
+
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Number of Employees by Function',
+                    data: data,
+                    backgroundColor: backgroundColors,
+                    borderColor: backgroundColors.map(color => color.replace('0.5', '1')), // Increase opacity for borders
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
+					</div>
+				</div>
+				<!--STATISTICS2-->
+					
+				<!--ENDSTATISTICS2-->
+								</div>
+				<!--ENDSTATISTICS-->
 				<footer class="footer pt-3  ">
 					<div class="container-fluid">
 						<div class="row align-items-center justify-content-lg-between">

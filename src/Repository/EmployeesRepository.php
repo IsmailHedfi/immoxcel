@@ -40,6 +40,16 @@ class EmployeesRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getEmployeeCountByFunction()
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e.EmpFunction, COUNT(e) as count')
+            ->groupBy('e.EmpFunction')
+            ->getQuery()
+            ->getResult();
+    }
+
+
     public function getHiringData(): array
     {
         return $this->createQueryBuilder('e')

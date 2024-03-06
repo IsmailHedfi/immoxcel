@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Employees;
+use App\Entity\Leaves;
 use App\Form\AddEmployeeType;
 use App\Repository\EmployeesRepository;
 use App\Repository\LeavesRepository;
@@ -32,6 +33,11 @@ class EmployeesController extends AbstractController
     #[Route('/employees', name: 'app_employees')]
     public function index(EmployeesRepository $eR,LeavesRepository $lR,PaginatorInterface $paginator,Request $request): Response
     {
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $employeeCounts = $entityManager->getRepository(Employees::class)->getEmployeeCountByFunction();
+
+
         $numberofemployees=$eR->countEmployees();
         $employeesdata=$eR->findAll();
         $reversedEmployeesData = array_reverse($employeesdata);
@@ -42,7 +48,9 @@ class EmployeesController extends AbstractController
             'controller_name' => 'EmployeesController',
             'numberofemployees'=> $numberofemployees,
             'employees'=>$employees,
-            'leaves'=>$leaves
+            'leaves'=>$leaves,
+            'employeeCounts' => $employeeCounts,
+
         ]);
     }
     #[Route('/addEmployee', name: 'app_employee_add')]
@@ -166,6 +174,16 @@ class EmployeesController extends AbstractController
         }
 */
         return new JsonResponse($data);
+    }
+    #[Route('/statistics', name: 'app_statistics')]
+    public function statistics(): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $employeeCounts = $entityManager->getRepository(Employees::class)->getEmployeeCountByFunction();
+
+        return $this->render('employees/index.html.twig', [
+            'employeeCounts' => $employeeCounts,
+        ]);
     }
 
 }

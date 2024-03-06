@@ -17,12 +17,14 @@ class LeavesController extends AbstractController
     #[Route('/leaves/{id}', name: 'app_leaves')]
     public function index($id, LeavesRepository $lR, EmployeesRepository $eR)
     {
+       
         //id employee
         $employee = $eR->find($id);
         $leaves = $employee->getLeaves();
         return $this->render('leaves/index.html.twig', [
             'controller_name' => 'LeavesController',
-            'leaves' => $leaves
+            'leaves' => $leaves,
+
         ]);
     }
 
@@ -104,4 +106,5 @@ class LeavesController extends AbstractController
     // Redirect back to the page displaying the leaves
     return $this->redirectToRoute('app_employees'); // Adjust the route name as needed
 }
+
 }
