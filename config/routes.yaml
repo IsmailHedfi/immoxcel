@@ -1,0 +1,56 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+display_admin:
+  path: /dashboard
+  controller: App\Controller\UserController::AdminDashboard
+
+display_login:
+  path: /login
+  controller: App\Controller\UserController::login
+
+display_sign_up:
+  path: /sign_up
+  controller: App\Controller\UserController::sign_up
+
+display_profile:
+  path: /profile/{id}
+  controller: App\Controller\UserController::profile
+
+delete_user:
+  path: /delete_User/{id}
+  controller: App\Controller\UserController::deleteUser
+
+go_to_logout:
+  path: /logout
+  controller: App\Controller\UserController::logout
+
+display_home:
+  path: /home
+  controller: App\Controller\UserController::home
+
+display_work:
+  path: /work_in_progress
+  controller: App\Controller\UserController::work
+
+verif_user:
+  path: /verif/{token}
+  controller: App\Controller\UserController::VerifyUser
+
+display_resend_verif:
+  path: /resend_verif/{id}
+  controller: App\Controller\UserController::resendVerif
+
+display_forgetPassword:
+  path: /forgetPassword
+  controller: App\Controller\UserController::forgottenPassword
+
+resetPass:
+  path: /resetPassword/{token}
+  controller: App\Controller\UserController::resetPassword
+
+2fa:
+  path: /2fa/{id}
+  controller: App\Controller\UserController::FA
+    

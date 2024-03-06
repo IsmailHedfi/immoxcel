@@ -1,0 +1,681 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CarController!
+{% endblock %}
+
+
+{% block body %}
+
+
+	<body class="g-sidenav-show bg-gray-100">
+
+
+		<div
+			class="main-content position-relative max-height-vh-100 h-100">
+			<!-- Navbar -->
+			<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur" data-scroll="false">
+				<div class="container-fluid py-1 px-3">
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+							<li class="breadcrumb-item text-sm">
+								<a class="opacity-5 text-white" href="javascript:;">Pages</a>
+							</li>
+							<li class="breadcrumb-item text-sm text-white active" aria-current="page">Dashboard</li>
+						</ol>
+						<h6 class="font-weight-bolder text-white mb-0">Dashboard</h6>
+					</nav>
+
+					<div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+						<div
+							class="ms-md-auto pe-md-3 d-flex align-items-center">
+							<!--
+																													<div class="input-group">
+																														<span class="input-group-text text-body">
+																															<i class="fas fa-search" aria-hidden="true"></i>
+																														</span>
+																														<input type="text" class="form-control" placeholder="Type here..." onfocus="focused(this)" onfocusout="defocused(this)">
+																													</div>
+																													-->
+							<form
+								action="" method="GET" class="search-form">
+								<!-- Add an id attribute to the input element -->
+								<input type="text" id="searchInput" name="search" placeholder="Search employee..." class="form-control">
+							</form>
+
+						</div>
+						<ul class="navbar-nav  justify-content-end">
+							<li class="nav-item d-flex align-items-center">
+								<a href="javascript:;" class="nav-link text-white font-weight-bold px-0">
+									<i class="fa fa-user me-sm-1" aria-hidden="true"></i>
+									<span class="d-sm-inline d-none">Sign In</span>
+								</a>
+							</li>
+							<li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+								<a href="javascript:;" class="nav-link text-white p-0" id="iconNavbarSidenav">
+									<div class="sidenav-toggler-inner">
+										<i class="sidenav-toggler-line bg-white"></i>
+										<i class="sidenav-toggler-line bg-white"></i>
+										<i class="sidenav-toggler-line bg-white"></i>
+									</div>
+								</a>
+							</li>
+							<li class="nav-item px-3 d-flex align-items-center">
+								<a href="javascript:;" class="nav-link text-white p-0">
+									<i class="fa fa-cog fixed-plugin-button-nav cursor-pointer" aria-hidden="true"></i>
+								</a>
+							</li>
+							<li class="nav-item dropdown pe-2 d-flex align-items-center">
+								<a href="javascript:;" class="nav-link text-white p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+									<i class="fa fa-bell cursor-pointer" aria-hidden="true"></i>
+								</a>
+								<ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
+									<li class="mb-2">
+										<a class="dropdown-item border-radius-md" href="javascript:;">
+											<div class="d-flex py-1">
+												<div class="my-auto">
+													<img src="../assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
+												</div>
+												<div class="d-flex flex-column justify-content-center">
+													<h6 class="text-sm font-weight-normal mb-1">
+														<span class="font-weight-bold">New message</span>
+														from Laur
+													</h6>
+													<p class="text-xs text-secondary mb-0">
+														<i class="fa fa-clock me-1" aria-hidden="true"></i>
+														13 minutes ago
+													</p>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li class="mb-2">
+										<a class="dropdown-item border-radius-md" href="javascript:;">
+											<div class="d-flex py-1">
+												<div class="my-auto">
+													<img src="../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
+												</div>
+												<div class="d-flex flex-column justify-content-center">
+													<h6 class="text-sm font-weight-normal mb-1">
+														<span class="font-weight-bold">New album</span>
+														by Travis Scott
+													</h6>
+													<p class="text-xs text-secondary mb-0">
+														<i class="fa fa-clock me-1" aria-hidden="true"></i>
+														1 day
+													</p>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a class="dropdown-item border-radius-md" href="javascript:;">
+											<div class="d-flex py-1">
+												<div class="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
+													<svg width="12px" height="12px" viewbox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+														<title>credit-card</title>
+														<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+															<g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
+																<g transform="translate(1716.000000, 291.000000)">
+																	<g transform="translate(453.000000, 454.000000)">
+																		<path class="color-background" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z" opacity="0.593633743"></path>
+																		<path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
+																	</g>
+																</g>
+															</g>
+														</g>
+													</svg>
+												</div>
+												<div class="d-flex flex-column justify-content-center">
+													<h6 class="text-sm font-weight-normal mb-1">
+														Payment successfully completed
+													</h6>
+													<p class="text-xs text-secondary mb-0">
+														<i class="fa fa-clock me-1" aria-hidden="true"></i>
+														2 days
+													</p>
+												</div>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+
+			<!-- End Navbar -->
+			<div class="container-fluid py-4">
+				<div
+					class="row">
+					<!-- DATAAAAAAAA -->
+					<div class="col-xl-3 col-sm-6 mb-xl-4 mb-4">
+						<div class="card">
+							<div class="card-body p-3">
+								<div class="row">
+									<div class="col-8">
+										<div class="numbers">
+											<p class="text-sm mb-0 text-uppercase font-weight-bold">Employees number</p>
+											<h5 class="font-weight-bolder">
+												{{numberofemployees}}
+											</h5>
+										</div>
+									</div>
+									<div class="col-4 text-end">
+										<div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+											<i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+						<div class="card">
+							<div class="card-body p-3">
+								<div class="row">
+									<div class="col-8">
+										<div class="numbers">
+											<p class="text-sm mb-0 text-uppercase font-weight-bold">Today's Users</p>
+											<h5 class="font-weight-bolder">
+												2,300
+											</h5>
+										</div>
+									</div>
+									<div class="col-4 text-end">
+										<div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
+											<i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+						<div class="card">
+							<div class="card-body p-3">
+								<div class="row">
+									<div class="col-8">
+										<div class="numbers">
+											<p class="text-sm mb-0 text-uppercase font-weight-bold">New Clients</p>
+											<h5 class="font-weight-bolder">
+												+3,462
+											</h5>
+
+										</div>
+									</div>
+									<div class="col-4 text-end">
+										<div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+											<i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-sm-6">
+						<div class="card">
+							<div class="card-body p-3">
+								<div class="row">
+									<div class="col-8">
+										<div class="numbers">
+											<p class="text-sm mb-0 text-uppercase font-weight-bold">Sales</p>
+											<h5 class="font-weight-bolder">
+												$103,430
+											</h5>
+										</div>
+									</div>
+									<div class="col-4 text-end">
+										<div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
+											<i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- End DATAAAA -->
+				<!-- PENDING LEAVES -->
+				{% if leaves != null %}
+					<div class="card-group ">
+						{% for leave in leaves %}
+							{% if leave.Status == "Pending" %}
+								<div class="card">
+									<div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
+										<p>
+											Leave ID:{{leave.id}}
+										</p>
+									</div>
+
+									<div class="card-body pt-2">
+										<span class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">{{leave.getEmployee().EmpName| upper ~' ' ~ leave.getEmployee().EmpLastName}}</span>
+										<br>
+										<span class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">Already taken leaves:{{leave.getEmployee().EmpTakenLeaves}}/{{leave.getEmployee().allowedLeaveDays}}</span>
+										<a class="card-title h5 d-block text-darker">
+											Reason:
+											{{leave.LeaveType}}
+										</a>
+										<p class="card-description mb-4">
+											Additional informations:
+											{% if leave.LeaveDescription is null %}
+												None
+											{% else %}
+												{{leave.LeaveDescription}}
+											{% endif %}
+											<div class="author align-items-center">
+												<div class="name ps-3">
+													<div class="stats">
+														<small>From
+															{{leave.StartDate| date('Y-m-d')}}
+															To
+															{{leave.FinishDate| date('Y-m-d')}}</small>
+													</div>
+
+												</div>
+											</div>
+										</p>
+									</div>
+									<div class="card-body pt-2">
+										<!-- Employee details and leave information -->
+										<!-- Your existing code for displaying leave details -->
+
+										<!-- Form to approve/disapprove leave -->
+											<form action="{{ path('update_leave_status') }}" method="POST"> <input type="hidden" name="leaveId" value="{{ leave.id }}">
+											<input type="hidden" name="status" value="Approved" class="leave-status">
+											<button type="button" class="btn btn-success leave-action-button" data-leave-id="{{ leave.id }}" data-status="Approved">Approve</button>
+										</form>
+
+										<form action="{{ path('update_leave_status') }}" method="POST">
+											<input type="hidden" name="leaveId" value="{{ leave.id }}">
+											<input type="hidden" name="status" value="Disapproved" class="leave-status">
+											<button type="button" class="btn btn-danger leave-action-button" data-leave-id="{{ leave.id }}" data-status="Disapproved">Disapprove</button>
+										</form>
+									</div>
+								</div>
+							{% endif %}
+						{% endfor %}
+					</div>
+				{% endif %}
+				<script>
+					function updateLeaveStatus(button) {
+var leaveId = button.dataset.leaveId;
+var status = button.dataset.status;
+
+var leaveStatusInput = button.parentElement.querySelector('.leave-status');
+if (leaveStatusInput) {
+leaveStatusInput.value = status;
+// Submit the form
+button.parentElement.submit();
+} else {
+console.error('Leave status input not found.');
+}
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+var buttons = document.querySelectorAll('.leave-action-button');
+buttons.forEach(function (button) {
+button.addEventListener('click', function () {
+updateLeaveStatus(this);
+});
+});
+});
+				</script>
+				<!-- END PENDING LEAVES -->
+				<div id="listEmployees">
+
+					<div class="row">
+						<div class="col-12">
+							<div class="mt-4 card mb-4 mb-xl-4">
+								<div class="card-header pb-0">
+									<h6>Employees table</h6>
+								</div>
+								<div class="card-body px-0 pt-0 pb-2">
+									<div class="table-responsive p-0">
+										<table class="table align-items-center mb-0">
+											<thead>
+												<tr>
+													<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Employee</th>
+													<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Function</th>
+													<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Phone</th>
+													<th class="text-secondary opacity-7"></th>
+													<th class="text-secondary opacity-7"></th>
+												</tr>
+											</thead>
+											<!--reeeeeeeeeeeeee-->
+											<tbody>
+
+												{% for employee in employees %}
+													<tr>
+														<td>
+															<div class="d-flex px-2 py-1">
+																<div>
+																	{% if employee.EmpSex == 'Female' %}
+																		<img src="{{asset("./female.png")}}" class="avatar avatar-sm me-3" alt="user1">
+																	{% else %}
+																		<img src="{{asset("./male.png")}}" class="avatar avatar-sm me-3" alt="user1">
+																	{% endif %}
+																</div>
+																<div class="d-flex flex-column justify-content-center">
+																	<h6 class="mb-0 text-sm">{{employee.EmpName | upper ~' ' ~ employee.EmpLastName}}</h6>
+																	<p class="text-xs text-secondary mb-0">{{employee.EmpEmail}}</p>
+																</div>
+															</div>
+														</td>
+														<td class="align-middle text-center text-sm">
+															<span class="badge badge-sm bg-gradient-success">{{employee.EmpFunction}}</span>
+														</td>
+														<td class="align-middle text-center">
+															<span class="text-secondary text-xs font-weight-bold">{{employee.EmpPhone}}</span>
+														</td>
+														<td class="align-middle">
+															<a class="btn btn-link text-dark px-3 mb-0" href="{{path('app_employee_show',{'id':employee.id}) }}">
+																<i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
+														</td>
+														<td class="align-middle">
+															<a class="btn btn-link text-danger text-gradient px-3 mb-0 delete-button" href="{{path('app_employee_delete',{'id':employee.id}) }}">
+																<i class="far fa-trash-alt me-2" aria-hidden="true"></i>Delete</a>
+															</a>
+														</td>
+														<script>
+    document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default action of clicking the link
+            
+            // Display a confirmation dialog
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this employee!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    // If the user confirms deletion, proceed with the link action
+                    window.location.href = this.getAttribute('href');
+                } else {
+                    // If the user cancels deletion, do nothing
+                }
+            });
+        });
+    });
+</script>
+													</tr>
+												{% else %}
+													<div class="alert alert-primary" role="alert">
+														<strong>Primary!</strong>
+														No employees found!
+													</div>
+												{% endfor %}
+											</tbody>
+										</table>
+
+									</div>
+									{# display navigation #}
+									<div class="navigation">
+										{{ knp_pagination_render(employees,'pagination.html.twig') }}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- OLD LEAVES -->
+						<div class="row">
+
+				<div class="col-lg-4">
+					<div class="card h-100">
+					<div class="mt-4 card mb-4 mb-xl-4">
+						<div class="card-header pb-0 p-3">
+							<div class="row">
+								<div class="col-6 d-flex align-items-center">
+									<h6 class="mb-0">Leaves</h6>
+								</div>
+								<div class="col-6 text-end">
+									<span class="badge bg-gradient-info">Status</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body p-3 pb-0">
+							<ul class="list-group">
+								{% for leave in leaves %}
+									{% if leave.Status != "Pending" %}
+										<li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+											<div class="d-flex flex-column">
+												<h6 class="mb-1 text-dark font-weight-bold text-sm">{{leave.getEmployee().EmpName| upper ~' ' ~ leave.getEmployee().EmpLastName}}</h6>
+												<span class="text-xs">
+													From{{leave.StartDate| date('Y-m-d')}}To{{leave.FinishDate| date('Y-m-d')}}
+												</span>
+											</div>
+											<div class="d-flex align-items-center text-sm">
+												{% if leave.Status == "Approved" %}
+													<span class="badge bg-gradient-success">Approved</span>
+												{% else %}
+													<span class="badge bg-gradient-danger">Disapproved</span>
+												{% endif %}
+											</div>
+										</li>
+									{% endif %}
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+					</div>
+				</div>
+				<!-- END OLD LEAVES -->
+
+				<!--STATISTICS-->
+
+
+				<div class="col-lg-4">
+					<div class="card h-100">
+						<div>
+        <canvas id="employeeChart" width="400" height="400"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('employeeChart').getContext('2d');
+        var employeeCounts = {{ employeeCounts|json_encode|raw }};
+        
+        var labels = [];
+        var data = [];
+        var backgroundColors = []; // Define an array to hold custom background colors
+        
+        // Define custom background colors for each function
+        var customColors = [
+            'rgba(255, 99, 132, 0.5)',
+            'rgba(54, 162, 235, 0.5)',
+            'rgba(255, 206, 86, 0.5)',
+            'rgba(75, 192, 192, 0.5)',
+			'rgba(251, 99, 64, 0.5)',
+            'rgba(94, 114, 228, 0.5)',
+
+            // Add more colors as needed
+        ];
+        
+        employeeCounts.forEach(function(item, index) {
+            labels.push(item.EmpFunction); // Use EmpFunction attribute
+            data.push(item.count);
+            backgroundColors.push(customColors[index % customColors.length]); // Ensure colors are cycled
+        });
+
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Number of Employees by Function',
+                    data: data,
+                    backgroundColor: backgroundColors,
+                    borderColor: backgroundColors.map(color => color.replace('0.5', '1')), // Increase opacity for borders
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
+					</div>
+				</div>
+				<!--STATISTICS2-->
+					
+				<!--ENDSTATISTICS2-->
+								</div>
+				<!--ENDSTATISTICS-->
+				<footer class="footer pt-3  ">
+					<div class="container-fluid">
+						<div class="row align-items-center justify-content-lg-between">
+							<div class="col-lg-6 mb-lg-0 mb-4">
+								<div class="copyright text-center text-sm text-muted text-lg-start">
+									©
+									<script>
+										document.write(new Date().getFullYear())
+									</script>,
+																																																							                made with
+									<i class="fa fa-heart"></i>
+									by
+									<a href="/login" class="font-weight-bold" target="_blank">ImmoXcel</a>
+
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<ul class="nav nav-footer justify-content-center justify-content-lg-end">
+									<li class="nav-item">
+										<a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">ImmoXcel</a>
+									</li>
+									<li class="nav-item">
+										<a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank">About Us</a>
+									</li>
+									<li class="nav-item">
+										<a href="https://www.creative-tim.com/blog" class="nav-link text-muted" target="_blank">Blog</a>
+									</li>
+									<li class="nav-item">
+										<a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted" target="_blank">License</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</footer>
+				<!-- NOTIFFFF add -->
+
+				{% if app.request.get('ok') is not null %}
+    <script>
+        // Display sweet alert
+        swal({
+            title: "Done!",
+            text: "Employee added successfully",
+            icon: "success",
+            timer: 3000, // 3 seconds
+        }).then(function() {
+           // $(".swal-modal").fadeOut();
+            window.location.href = '{{ path('app_employees') }}';
+        });
+    </script>
+{% endif %}
+
+
+
+			</div>
+		</div>
+	</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const tableBody = document.querySelector('#listEmployees table tbody');
+
+        searchInput.addEventListener('input', function () {
+            const searchTerm = this.value.trim().toLowerCase();
+            const url = '/search?search=' + searchTerm;
+
+            fetch(url)
+            .then(response => response.json())
+            .then(data => { // Clear previous results
+                tableBody.innerHTML = '';
+
+                if (data.length === 0) { // If no employees found, display a message
+                    tableBody.innerHTML = '    <div style="display: flex; justify-content: center;"><span class="badge bg-gradient-primary" >No employees Found</span></div>';
+                } else { // Loop through each employee and create table rows
+                    data.forEach(employee => {
+                        const row = document.createElement('tr');
+
+                        // Insert employee data into table rows
+                        row.innerHTML = `
+                            <td>
+                                <div class="d-flex px-2 py-1">
+                                    <div>
+                                        <img src="${employee.EmpSex === 'Female' ? './female.png' : './male.png'}" class="avatar avatar-sm me-3" alt="user1">
+                                    </div>
+                                    <div class="d-flex flex-column justify-content-center">
+                                        <h6 class="mb-0 text-sm">${employee.EmpName.toUpperCase()} ${employee.EmpLastName}</h6>
+                                        <p class="text-xs text-secondary mb-0">${employee.EmpEmail}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="align-middle text-center text-sm">
+                                <span class="badge badge-sm bg-gradient-success">${employee.EmpFunction}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">${employee.EmpPhone}</span>
+                            </td>
+                            <td class="align-middle">
+                                <a class="btn btn-link text-dark px-3 mb-0" href="/employee/${employee.id}">
+                                    <i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit
+                                </a>
+                            </td>
+                            <td class="align-middle">
+                                <a class="btn btn-link text-danger text-gradient px-3 mb-0 delete-button" href="/deleteEmployee/${employee.id}">
+                                    <i class="far fa-trash-alt me-2" aria-hidden="true"></i>Delete
+                                </a>
+                            </td>
+
+                        `;
+
+                        // Append the row to the table body
+                        tableBody.appendChild(row);
+
+                        // Add event listener for delete button
+                        const deleteButton = row.querySelector('.delete-button');
+                        deleteButton.addEventListener('click', function(event) {
+                            event.preventDefault(); // Prevent the default action of clicking the link
+                            const deleteUrl = this.getAttribute('href');
+
+                            // Display a confirmation dialog
+                            swal({
+                                title: "Are you sure?",
+                                text: "Once deleted, you will not be able to recover this employee!",
+                                icon: "warning",
+                                buttons: true,
+                                dangerMode: true,
+                            })
+                            .then((willDelete) => {
+                                if (willDelete) {
+                                    // If the user confirms deletion, proceed with the delete action
+                                    window.location.href = deleteUrl;
+                                } else {
+                                    // If the user cancels deletion, do nothing
+                                }
+                            });
+                        });
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching employees:', error);
+            });
+        });
+    });
+</script>
+
+
+</body></div></body>{% endblock %}
