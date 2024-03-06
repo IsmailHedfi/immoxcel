@@ -34,7 +34,8 @@ class EmployeesController extends AbstractController
     {
         $numberofemployees=$eR->countEmployees();
         $employeesdata=$eR->findAll();
-        $employees=$paginator->paginate($employeesdata,$request->query->getInt('page',1),4);
+        $reversedEmployeesData = array_reverse($employeesdata);
+        $employees=$paginator->paginate($reversedEmployeesData,$request->query->getInt('page',1),4);
 
         $leaves=$lR->findAll();
         return $this->render('employees/index.html.twig', [
