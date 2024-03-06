@@ -5,7 +5,7 @@ display_materials:
   path: /materials
   controller: App\Controller\MaterialsController::index
 display_addmaterials:
-  path: /addmaterials
+  path: /addmaterials/{id}
   controller: App\Controller\MaterialsController::addmaterials
 display_affichermaterials:
   path: /affichermaterials
@@ -31,6 +31,15 @@ display_editdepot:
 display_deletedepot:
   path: /deletedepot/{id}
   controller: App\Controller\DepotController::deletedepot
+depot_pdf_generate:
+    path: '/generatePdf/{id}'
+    controller: App\Controller\DepotController::generatePdf
+app_map:
+    path: '/map'
+    controller: App\Controller\DepotController::map
+search_depot:
+    path: '/searchdepot'
+    controller: App\Controller\DepotController::searchdepot
 
 
   

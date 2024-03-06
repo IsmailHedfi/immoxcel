@@ -20,6 +20,7 @@ class DepotRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Depot::class);
     }
+    
 
 //    /**
 //     * @return Depot[] Returns an array of Depot objects

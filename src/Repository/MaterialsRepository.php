@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Materials;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Model\SearchData;
 
 /**
  * @extends ServiceEntityRepository<Materials>
@@ -20,6 +21,7 @@ class MaterialsRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Materials::class);
     }
+    
 
 //    /**
 //     * @return Materials[] Returns an array of Materials objects

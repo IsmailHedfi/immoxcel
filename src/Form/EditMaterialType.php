@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 
-class MaterialsType extends AbstractType
+class EditMaterialsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -23,6 +23,15 @@ class MaterialsType extends AbstractType
             ->add('TypeMaterial',TextType::class,['empty_data' => ''])
             ->add('UnitPrice',NumberType::class,['empty_data' => ''])
             ->add('Quantity',IntegerType::class,['empty_data' => ''])
+            ->add('Depot',EntityType::class, 
+            ['class'=>'App\Entity\Depot',
+            'choice_label'=>function ($Depot) {
+                return $Depot->getLocation() . ' / ' . $Depot->getAdresse();
+            },
+            'query_builder' => function (DepotRepository $er) {
+                return $er->createQueryBuilder('d')
+                    ->where('d.QuantityAvailable < d.LimitStock');
+            },])
             ->add('Submit',SubmitType::class)
         ;
     }

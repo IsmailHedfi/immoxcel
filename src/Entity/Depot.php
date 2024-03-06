@@ -29,6 +29,9 @@ class Depot
     #[Assert\Positive(message:"Limit Stock should be positive")]
     private ?int $LimitStock = null;
 
+    #[ORM\Column]
+    private ?int $QuantityAvailable = null;
+    
     #[ORM\OneToMany(targetEntity: Materials::class, mappedBy: 'depot')]
     private Collection $Materials;
 
@@ -105,6 +108,18 @@ class Depot
     public function setLimitStock(int $LimitStock): static
     {
         $this->LimitStock = $LimitStock;
+
+        return $this;
+    }
+
+    public function getQuantityAvailable(): ?int
+    {
+        return $this->QuantityAvailable;
+    }
+
+    public function setQuantityAvailable(int $QuantityAvailable): static
+    {
+        $this->QuantityAvailable = $QuantityAvailable;
 
         return $this;
     }
