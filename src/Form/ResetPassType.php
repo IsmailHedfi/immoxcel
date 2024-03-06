@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class ResetPassType extends AbstractType
 {
@@ -14,7 +15,7 @@ class ResetPassType extends AbstractType
     {
         $builder
            
-            ->add('Password')
+            ->add('Password', PasswordType::class)
             ->add('Send',SubmitType::class) 
         ;
     }

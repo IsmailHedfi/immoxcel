@@ -14,6 +14,8 @@ use App\Service\JWTService;
 use App\Service\SendMailService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use OTPHP\TOTP;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
@@ -25,6 +27,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 class UserController extends AbstractController
 {
@@ -35,10 +38,9 @@ class UserController extends AbstractController
         $this->security = $security;
     }
     #[Route('/dashboard', name: 'display_dashboard')]
-    public function AdminDashboard(UserRepository $rep ,EmployeesRepository $rep1,SessionInterface $session)
+    public function AdminDashboard(HttpFoundationRequest $request,UserRepository $rep, PaginatorInterface $paginator ,EmployeesRepository $rep1,SessionInterface $session)
     {
         $userid=$session->get('user_id');
-        if(!$userid){var_dump('null');}
         $user_to_show=$rep->find($userid);
         $username = $user_to_show->getUsername();
         $isAdmin = $user_to_show->getEmployee()->getEmpFunction();
@@ -47,15 +49,30 @@ class UserController extends AbstractController
         }
         $emp=$rep1->findAll();
         $users=$rep->findAll();
+        $reversed_users=array_reverse($users);
         $num_emp=count($emp);
         $num_users=count($users);
+        $entityManager = $this->getDoctrine()->getManager();
+        $query = $entityManager->getRepository(User::class)->createQueryBuilder('m')->orderBy('m.id', 'DESC')
+            ->getQuery();
+        
+        $page=$request->query->getInt('page',1);
+        $limit=$request->query->getInt('limit',2);
+        $paginator = new Paginator($query); 
+        $paginator
+            ->getQuery()
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit);
+        $user=$paginator->getIterator();
+        $totalCount = count($paginator);
+        $totalPages = ceil($totalCount / $limit);
         if($num_users>0 && $num_emp>0)
             {
-                return $this->render('admin/AdminDashboard.html.twig',['users'=>$users,'numUsers' => $num_users,'numEmp'=>$num_emp,'username'=>$username]);
+                return $this->render('admin/AdminDashboard.html.twig',['users'=>$user,'numUsers' => $num_users,'numEmp'=>$num_emp,'username'=>$username,'totalPages' => $totalPages,'page' => $page]);
             }
         else
             {
-                return $this->render('admin/AdminDashboard.html.twig',['users'=>$users,'numUsers' => $num_users,'numEmp'=>$num_emp,'username'=>$username]);
+                return $this->render('admin/AdminDashboard.html.twig',['users'=>$reversed_users,'numUsers' => $num_users,'numEmp'=>$num_emp,'username'=>$username,'totalPages' => $totalPages,'page' => $page]);
             }
         
     }
@@ -85,15 +102,12 @@ class UserController extends AbstractController
             $session->set('user',$user);
             $session->set('user_id', $user->getId());
             $session->set('role',$user->getEmployee()->getEmpFunction());
-            if($role=="Admin"){
-                
-                
+            if($role=="Admin")
+            {    
                 return $this->redirectToRoute('display_admin');
             }
             else if($role!="Admin")
-            {
-               
-                
+            {   
                 return $this->redirectToRoute('display_work');
             }
             }
@@ -115,7 +129,7 @@ class UserController extends AbstractController
         
         return $this->render('admin/login.html.twig', ['f' => $form->createView()]);
     }
-
+   
     private function verifyCaptcha(string $recaptchaResponse): object
     {
         $recaptchaSecret = '6LcOUYcpAAAAANpKXcd5P0MIsRX5_x7N30RIlcD8'; // Replace with your reCAPTCHA secret key
@@ -322,18 +336,23 @@ class UserController extends AbstractController
     }
 
     #[Route('/forgetPassword', name: 'display_forgetPassword')]
-    public function forgottenPassword(HttpFoundationRequest $request,TokenGeneratorInterface $tokenGenrator,EntityManager $em,SendMailService $mail):response
+    public function forgottenPassword(HttpFoundationRequest $request,TokenGeneratorInterface $tokenGenrator,EntityManagerInterface $em,SendMailService $mail):response
     {
         $user=new User();
         $form=$this->createForm(ResetPasswordType::class,$user);
         $form->handleRequest($request);
         if($form->isSubmitted())
             {
+                
                 $email=$form->get('Email')->getData();
                 $userRepository = $this->getDoctrine()->getRepository(User::class);
+                
+                $userRepository = $this->getDoctrine()->getRepository(User::class);
                 $user=$userRepository->findOneBy(['Email' => $email]);
+                
                 if($user)
                     {
+                        
                         $token=$tokenGenrator->generateToken();
                         $user->setresetToken($token);
                         $em->persist($user);
@@ -347,19 +366,23 @@ class UserController extends AbstractController
                         $this->addFlash('Success','Mail sent Seccessfully');
                         return $this->redirectToRoute('display_login');
                     }
-                $this->addFlash('danger','Probleme has been Occured');
-                $this->redirectToRoute('display_login');
+                else
+                {
+                    $this->addFlash('warning','Problem has been Occured');
+                    return $this->redirectToRoute('display_login');
+                    
+                }
             }
         return $this->render('admin/reset_password_request.html.twig',['f' => $form->createView()]);
     }
 
     #[Route('/resetPassword/{token}', name: 'resetPass')]
-    public function resetPassword(string $token,HttpFoundationRequest $request
-    , UserPasswordEncoderInterface $passwordEncoder,EntityManager $em
+    public function resetPassword($token,HttpFoundationRequest $request
+    , UserPasswordEncoderInterface $passwordEncoder,EntityManagerInterface $em
     ):Response
         {
             $userRepository = $this->getDoctrine()->getRepository(User::class);
-            $user=$userRepository->findOneBy(['token' => $token]);
+            $user=$userRepository->findOneBy(['resetToken' => $token]);
             if($user)
                 {
                     $form=$this->createForm(ResetPassType::class,$user);
@@ -367,10 +390,14 @@ class UserController extends AbstractController
                     if($form->isSubmitted())
                         {
                             $user->setresetToken('');
+                            
                             $ConfirmPassword=$request->request->get('confirm_password'); 
                             $Password=$form->get('Password')->getData();
+                            var_dump($Password);
+                            var_dump($ConfirmPassword);
                             if($Password===$ConfirmPassword)
                                 {
+                                    var_dump($Password);
                                     $encodedPassword=$passwordEncoder->encodePassword($user,$Password);
                                     $user->setPassword($encodedPassword);
                                     $em->persist($user);
