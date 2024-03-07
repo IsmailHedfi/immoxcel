@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+  
+  <div class="main-content position-relative max-height-vh-100 h-100">
+    <div class="container-fluid py-8">
+      <div class="row">
+        <div class="col-md-0">
+        {{ form_start(f,{'attr':{'novalidate': 'novalidate'}}) }}
+          <div class="card">
+            <div class="card-header pb-0">
+              <div class="d-flex align-items-center">
+                <p class="mb-0">edit Depots</p>
+                
+                {{ form_widget(f.Submit,{'label':'EDIT','attr':{'class':'btn btn-primary btn-sm ms-auto'}}) }}
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="example-text-input" class="form-control-label">Location</label>
+                    {{ form_widget(f.location,{'attr':{'class':'form-control'}}) }}
+                     {{ form_errors(f.location)}}
+                    
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="example-text-input" class="form-control-label">Adresse</label>
+                    {{ form_widget(f.Adresse,{'attr':{'class':'form-control'}}) }}
+                     {{ form_errors(f.Adresse)}}
+                    
+                  </div>
+                </div>
+                
+               
+              
+           
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="example-text-input" class="form-control-label">Limit Stock</label>
+                    {{ form_widget(f.LimitStock,{'attr':{'class':'form-control'}}) }}
+                     {{ form_errors(f.LimitStock)}}
+                    
+                  </div>
+                </div>
+                
+               
+               </div>
+              </div>
+              </div>
+            </div>
+          </div>
+          {{ form_end(f) }}
+        </div>
+        
+      </div>
+      {% endblock %}

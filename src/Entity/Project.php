@@ -51,10 +51,14 @@ class Project
     #[ORM\ManyToMany(targetEntity: Employees::class, mappedBy: 'listProjects')]
     private Collection $listEmployees;
 
+    #[ORM\ManyToMany(targetEntity: Materials::class, inversedBy: 'projects')]
+    private Collection $listeMaterials;
+
     public function __construct()
     {
         $this->listTasks = new ArrayCollection();
         $this->listEmployees = new ArrayCollection();
+        $this->listeMaterials = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -191,6 +195,30 @@ class Project
         if ($this->listEmployees->removeElement($listEmployee)) {
             $listEmployee->removeListProject($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Materials>
+     */
+    public function getListeMaterials(): Collection
+    {
+        return $this->listeMaterials;
+    }
+
+    public function addListeMaterial(Materials $listeMaterial): static
+    {
+        if (!$this->listeMaterials->contains($listeMaterial)) {
+            $this->listeMaterials->add($listeMaterial);
+        }
+
+        return $this;
+    }
+
+    public function removeListeMaterial(Materials $listeMaterial): static
+    {
+        $this->listeMaterials->removeElement($listeMaterial);
 
         return $this;
     }

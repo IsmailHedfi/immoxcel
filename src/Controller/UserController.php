@@ -102,6 +102,8 @@ class UserController extends AbstractController
                         return $this->redirectToRoute('app_employees');
                     } else if ($role == "Production_Manager") {
                         return $this->redirectToRoute('app_projects');
+                    } else if ($role == "Inventory_Manager") {
+                        return $this->redirectToRoute('display_afficherdepot');
                     } else if ($role != "Admin") {
                         return $this->redirectToRoute('display_work');
                     }

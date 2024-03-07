@@ -48,13 +48,9 @@ class AddEmployeeType extends AbstractType
                     '--' => '',
                     'Employee' => 'Employee',
                     'HR_Manager' => 'HR_Manager',
-                    'HR_Agent' => 'HR_Agent',
                     'Production_Manager' => 'Production_Manager',
-                    'Production_Agent' => 'Production_Agent',
-                    'Inventory_Manger' => 'Inventory_Manger',
-                    'Inventory_Agent' => 'Inventory_Agent',
+                    'Inventory_Manager' => 'Inventory_Manager',
                     'Financial_Manager' => 'Financial_Manager',
-                    'Financial_Agent' => 'Financial_Agent',
                 ],
             ], null, [
                 'empty_data' => '', // Default value for EmpName if left empty
