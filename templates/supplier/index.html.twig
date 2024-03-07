@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block title %}
-	DashBoard
+	Supplier
 {% endblock %}
-{% block container %}
+{% block body %}
 	<main
 		class="main-content position-relative border-radius-lg ">
 		<!-- Navbar -->
@@ -31,12 +31,37 @@
 			</div>
 		</nav>
 		<!-- End Navbar -->
+
+		<!-- Success Message -->
+
 		<div class="container-fluid py-4">
 			<div class="row">
 				<div class="col-12">
 					<div class="card mb-4">
 						<div class="card-header pb-0">
 							<h6>Supplier Table</h6>
+							<nav class="navbar bg-body-tertiary">
+								<div class="container-fluid">
+									<a href="/dashboard/addsupplier">
+										<button type="button" class="btn btn-info">Add New</button>
+									</a>
+
+									<a href="/dashboard/Supplierr">
+										<button type="button" class="btn btn-info">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewbox="0 0 16 16">
+												<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+												<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+											</svg>
+										</button>
+									</a>
+
+									<form class="d-flex" role="search">
+										{% include "/expenses/searchData.html.twig" with {
+																																																																																																		 form:form 
+													 }  only %}
+									</form>
+								</div>
+							</nav>
 						</div>
 						<div class="card-body px-0 pt-0 pb-2">
 							<div class="table-responsive p-0">
@@ -85,21 +110,71 @@
 															<i class="far fa-trash-alt me-2"></i>Delete</a>
 														<a class="btn btn-link text-dark px-3 mb-0" href="{{ path ('app_edit_supplier', {'id':p.id}) }}">
 															<i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
+														<a class="btn btn-link text-dark px-3 mb-0" href="{{ path ('heloosmo', {'id':p.id}) }}">
+															<i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>send text</a>
+
 													</div>
 												</td>
 											</tr>
 										</tr>
 									{% endfor %}
 								</tbody>
-								<div class="ms-auto text-end">
-									<a class="btn btn-link text-dark px-3 mb-0" href="/dashboard/addsupplier">
-										<i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Add New</a>
-								</div>
-							</table>
 
+							</table>
+							<!--	<div class="alert alert-success mt-3 text-center">Le SMS a été envoyé avec succès.
+																																																																															<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="position: absolute; top: 0.5rem; right: 0.5rem;"></button>
+																																																																														</div>   -->
 						</div>
 					</div>
 				</div>
+				<!--  Error message -->
+				{% if app.flashes('error')|length > 0 %}
+					<div class="container-fluid py-4">
+						<div class="alert alert-danger alert-dismissible fade show" role="alert" style="padding: 0.5rem; font-size: 0.875rem; max-width: 400px;">
+							<strong>Error:</strong>
+							<p>You don't have any more money, so you cannot pursue the purchase.</p>
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="position: absolute; top: 0.5rem; right: 0.5rem;"></button>
+						</div>
+					</div>
+				{% endif %}
+				<!-- End Error message -->
+				<!-- Start Error message -->
+				{% if app.flashes('success')|length > 0 %}
+					<div class="container-fluid py-4">
+						<div class="row justify-content-center">
+							<div class="col-md-6">
+								<div class="alert alert-success mt-3 text-center" role="alert" style="padding: 0.5rem; font-size: 0.875rem; max-width: 400px;">
+									<strong>Success:</strong>
+									<p>Added successfully.</p>
+									<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endif %}
 			</div>
+			<style>
+
+				.card-body {
+					position: relative;
+					height: 323px;
+				}
+
+				#btn {
+					position: relative;
+					top: 47px;
+					left: 188px;
+				}
+
+				#form-name {
+					position: relative;
+					top: 10px;
+				}
+
+				#form-message {
+					position: relative;
+					top: 27px;
+				}
+			</style>
 		</div>
 	{% endblock %}

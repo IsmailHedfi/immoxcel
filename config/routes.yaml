@@ -1,3 +1,14 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+
+
+
+
+ajax_search:
+    path: /searchyo
+    controller: App\Controller\ExpensesController::searchAction2
+
+
+

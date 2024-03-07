@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Expense Report</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				background-color: #f8f9fa;
+				color: #333;
+			}
+
+			.container {
+				width: 80%;
+				margin: 50px auto;
+				padding: 20px;
+				border-radius: 10px;
+				background-color: #fff;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			}
+
+			.header {
+				text-align: center;
+				margin-bottom: 20px;
+			}
+
+			.logo {
+				width: 120px;
+				height: auto;
+				margin-bottom: 20px;
+			}
+
+			h1 {
+				color: rgba(54, 162, 235, 0.2);
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-bottom: 20px;
+			}
+
+			th,
+			td {
+				padding: 12px 15px;
+				text-align: left;
+				border-bottom: 1px solid #ddd;
+			}
+
+			th {
+				background-color: #f2f2f2;
+			}
+
+			tr:nth-child(even) {
+				background-color: #f2f2f2;
+			}
+
+			.facture-total {
+				text-align: right;
+				margin-top: 20px;
+				font-weight: bold;
+				border-top: 2px solid rgba(54, 162, 235, 0.2);
+				padding-top: 10px;
+			}
+
+			.facture-total p {
+				margin: 0;
+			}
+
+			.footer {
+				text-align: center;
+				margin-top: 20px;
+				font-size: 12px;
+				color: #666;
+			}
+
+			.signature {
+				text-align: right;
+				margin-top: 50px;
+				font-style: italic;
+				color: #888;
+			}
+
+			/* Increase spacer height */
+			.spacer {
+				height: 100px; /* Adjust the height as needed */
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<img src="{{ asset('./back/img/apple-icon.jpeg') }}" alt="main_logo" class="logo">
+				<div style="height:1000px"></div>
+				<h1>Transaction Report</h1>
+				<div style="height:1000px"></div>
+
+				<p>Date:
+					{{ expenses.dateE|date("d/m/Y") }}</p>
+			</div>
+			<div class="facture-details">
+				<div style="height:1000px"></div>
+
+				<table>
+					<tr>
+						<th>ID</th>
+						<th>Type</th>
+						<th>Description</th>
+						<th>Number</th>
+						<th>Coast</th>
+					</tr>
+					<tr>
+
+						<td>{{ expenses.id }}</td>
+						<td>{{ expenses.Type }}</td>
+						<td>{{ expenses.Description }}</td>
+						<td>{{ expenses.QuantityE }}</td>
+						<td>{{ expenses.coast }}</td>
+					</tr>
+					<!-- Add more rows as needed -->
+				</table>
+			</div>
+			<div class="facture-total">
+				<p>Total Amount:
+					{{ expenses.Totalamount }}</p>
+			</div>
+		</div>
+
+		<!-- Spacer -->
+		<div class="spacer"></div>
+		<div style="height:20000px"></div>
+		<div style="height:20000px"></div>
+		<div style="height:20000px"></div>
+
+		<footer>
+			<div class="footer">
+				Îmmoxcel Transaction Management System &mdash;
+				{{ "now"|date("d/m/Y") }}
+			</div>
+			<div class="signature">
+				Authorized Signature
+			</div>
+		</footer>
+	</body>
+</html>

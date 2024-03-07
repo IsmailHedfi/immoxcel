@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+	Add Transaction
+{% endblock %}
+{% block body %}
+	<main
+		class="main-content position-relative border-radius-lg">
+		<!-- Navbar -->
+		<nav
+			class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="false"><!-- Navbar content here -->
+		</nav>
+		<!-- End Navbar -->
+		<div class="container-fluid py-4">
+			<div class="row">
+				<div class="col-8">
+					<div class="card mb-5">
+						<div class="container">
+							<div class="row justify-content-center">
+								<div class="col-md-8">
+									<div class="card mt-3">
+										<div class="card-header">
+											<h3 class="text-center">Add a New Supplier
+											</h3>
+										</div>
+										<div class="card-body">
+											{{ form_start(f, {'attr': {'novalidate': 'novalidate'}}) }}
+											<div class="form-group">
+												{{ form_row(f.CompanyName, {'attr': {'class': 'form-control'}}) }}
+											</div>
+
+											<div class="form-group" id="form-name">
+												{{ form_row(f.Address, {'attr': {'class': 'form-control'}}) }}
+											</div>
+											<div class="form-group" id="form-message">
+												{{ form_label(f.MaterialsS,"Products") }}
+												{{ form_widget(f.MaterialsS, {'attr': {'class': 'form-control'}}) }}
+											</div>
+											<div class="form-group" id="form-message">
+												{{ form_row(f.PhoneNumber, {'attr': {'class': 'form-control'}}) }}
+
+											</div>
+											<div class="form-group" id="form-message">
+												{{ form_row(f.PatentRef, {'attr': {'class': 'form-control'}}) }}
+											</div>
+											<button type="submit" class="btn btn-primary btn-block" id="btn">Add</button>
+										</div>
+									</div>
+									{% if app.request.query.has('smsSent') %}
+										<div class="alert alert-success mt-3 text-center">Added With success.</div>
+									{% endif %}
+									{{ form_end(f) }}
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+			<style>
+
+				.card-body {
+					position: relative;
+					height: 630px;
+				}
+
+				#btn {
+					position: relative;
+					top: 80px;
+					left: 188px;
+				}
+
+				#form-name {
+					position: relative;
+					top: 10px;
+				}
+
+				#form-message {
+					position: relative;
+					top: 27px;
+				}
+			</style>
+		</div>
+	</main>
+{% endblock %}

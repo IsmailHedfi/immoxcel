@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SupplierRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Mime\Message;
@@ -37,6 +39,14 @@ class Supplier
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Patent refrence is required")]
     private ?string $PatentRef = null;
+
+    #[ORM\OneToMany(mappedBy: 'supplier', targetEntity: Expenses::class)]
+    private Collection $Expenses;
+
+    public function __construct()
+    {
+        $this->Expenses = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -100,6 +110,36 @@ class Supplier
     public function setPatentRef(string $PatentRef): static
     {
         $this->PatentRef = $PatentRef;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Expenses>
+     */
+    public function getExpenses(): Collection
+    {
+        return $this->Expenses;
+    }
+
+    public function addExpense(Expenses $expense): static
+    {
+        if (!$this->Expenses->contains($expense)) {
+            $this->Expenses->add($expense);
+            $expense->setSupplier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExpense(Expenses $expense): static
+    {
+        if ($this->Expenses->removeElement($expense)) {
+            // set the owning side to null (unless already changed)
+            if ($expense->getSupplier() === $this) {
+                $expense->setSupplier(null);
+            }
+        }
 
         return $this;
     }

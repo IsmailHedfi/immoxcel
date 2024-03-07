@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>PDF Transaction</title>
+		<!-- Include Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	</head>
+	<body>
+
+		<!-- Include Bootstrap CSS -->
+		<div class="sidebar-search">
+			<div class="input-group custom-search-form">
+				<input type="text" id="search" class="form-control" placeholer="Search here">
+			</div>
+
+		</div>
+
+		<div id="searchresult"></div>
+
+		<!-- JavaScript to handle AJAX search -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+		<script type="text/javascript">
+			$(document).ready(function () {
+$("#search").keyup(function () {
+var input = $(this).val();
+echo "hello";
+if (input != "") {
+$.ajax({
+url: "{{ path('ajax_search') }}",
+method: "POST",
+data: {
+input: input
+},
+success: function (data) {
+if (data.expenses.length > 0) { // Display search results in a table
+var tableHtml = '<table class="table table-bordered table-striped mt-4">';
+tableHtml += '<tr><th>ID</th><th>Type</th><th>Description</th><th>Total Amount</th></tr>';
+data.expenses.forEach(function (expense) {
+tableHtml += '<tr>';
+tableHtml += '<td>' + expense.id + '</td>';
+tableHtml += '<td>' + expense.type + '</td>';
+tableHtml += '<td>' + expense.description + '</td>';
+tableHtml += '<td>' + expense.totalAmount + '</td>';
+tableHtml += '</tr>';
+});
+tableHtml += '</table>';
+$("#searchresult").html(tableHtml);
+} else { // Display no data message
+$("#searchresult").html('<h6 class="text-danger text-center mt-3">No data</h6>');
+}
+}
+});
+} else {
+$("#searchresult").html(''); // Clear search results if input is empty
+}
+});
+});
+		</script>
+	</body>
+</html>

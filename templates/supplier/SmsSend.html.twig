@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Envoyer un SMS
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-6">
+				<div class="card mt-5">
+					<div class="card-header">
+						<h3 class="text-center">Envoyer un SMS</h3>
+					</div>
+					<div class="card-body">
+						{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+						<div class="form-group">
+							{{ form_row(form.number, {'attr': {'class': 'form-control'}}) }}
+						</div>
+						<div class="form-group">
+							{{ form_row(form.name, {'attr': {'class': 'form-control'}}) }}
+						</div>
+						<div class="form-group">
+							{{ form_row(form.text, {'attr': {'class': 'form-control'}}) }}
+						</div>
+						<button type="submit" class="btn btn-primary btn-block">Send SMS</button>
+						{{ form_end(form) }}
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

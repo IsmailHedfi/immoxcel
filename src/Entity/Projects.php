@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProjectsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -34,6 +36,10 @@ class Projects
 
     #[ORM\Column]
     private ?float $coast = null;
+
+    #[ORM\OneToOne(mappedBy: 'project')]
+    private ?Expenses $expenses = null;
+
 
     public function getId(): ?int
     {
@@ -108,6 +114,23 @@ class Projects
     public function setCoast(float $coast): static
     {
         $this->coast = $coast;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Expenses>
+     */
+
+
+    public function getExpenses(): ?Expenses
+    {
+        return $this->expenses;
+    }
+
+    public function setExpenses(?Expenses $expenses): self
+    {
+        $this->expenses = $expenses;
 
         return $this;
     }

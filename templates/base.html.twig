@@ -171,11 +171,11 @@ Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
 
 
 		{% block aside %}
-			<aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
+			<aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-4 fixed-start ms-4 " id="sidenav-main">
 				<div class="sidenav-header">
 					<a class="navbar-brand m-0" href=" /dashboard/ " target="_blank">
 						<img src=" {{ asset ('./back/img/logo-ct-dark.png ')}}" class="navbar-brand-img h-100" alt="main_logo" sizes="100%">
-						<span class="ms-1 font-weight-bold">Immoxcel</span>
+						<span class="ms-1 font-weight-bold"></span>
 					</a>
 				</div>
 				<hr class="horizontal dark mt-0">
@@ -190,11 +190,11 @@ Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link " href="/dashboard/">
+							<a class="nav-link " href="/dashboard/hell">
 								<div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
 									<i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
 								</div>
-								<span class="nav-link-text ms-1">NOthing Here Just yet</span>
+								<span class="nav-link-text ms-1">Transaction</span>
 							</a>
 						</li>
 						<li class="nav-item">
@@ -213,6 +213,14 @@ Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
 								<span class="nav-link-text ms-1">Supplier</span>
 							</a>
 						</li>
+						<li class="nav-item">
+							<a class="nav-link " href="/Archive">
+								<div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+									<i class="ni ni-credit-card text-success text-sm opacity-10"></i>
+								</div>
+								<span class="nav-link-text ms-1">Archive</span>
+							</a>
+						</li>
 					</ul>
 				</div>
 				<div class="sidenav-footer mx-3 ">
@@ -228,18 +236,16 @@ Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
 
 					</aside>
 				{% endblock %}
-				{% block body %}
-					{% block container %}{% endblock %}
-					{% block footer %}
-						<footer class="footer pt-3  ">
-							<div class="container-fluid">
-								<div class="row align-items-center justify-content-lg-between"></div>
-							</div>
-						</footer>
-					{% endblock %}
-				{% endblock %}
+				{% block body %}{% endblock %}
 
 			</body>
 		</html>
 	</body>
+	{% block footer %}
+		<footer class="footer pt-3  ">
+			<div class="container-fluid">
+				<div class="row align-items-center justify-content-lg-between"></div>
+			</div>
+		</footer>
+	{% endblock %}
 </html></div></body></hmtl>

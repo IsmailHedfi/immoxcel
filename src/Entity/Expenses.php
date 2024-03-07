@@ -6,6 +6,8 @@ use App\Repository\ExpensesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 #[ORM\Entity(repositoryClass: ExpensesRepository::class)]
 class Expenses
 {
@@ -21,19 +23,38 @@ class Expenses
     private ?string $Type = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: "Required ")]
+    #[Assert\Positive(message: "Requires positive number")]
     private ?float $QuantityE = null;
 
     #[ORM\Column]
+    #[Assert\Positive(message: "Requires positive number")]
+    #[Assert\NotBlank(message: "Required , pelase fill it  ")]
     private ?float $coast = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Required more than 3 caracters ")]
+    #[Assert\Length(min: 3)]
     private ?string $Description = null;
 
     #[ORM\Column]
     private ?float $Totalamount = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Expenses')]
-    private ?Materials $materials = null;
+    #[ORM\ManyToOne(inversedBy: 'expenses')]
+    private ?Products $product = null;
+
+    #[ORM\ManyToOne(inversedBy: 'expenses')]
+    private ?Supplier $supplier = null;
+
+    #[ORM\ManyToOne(inversedBy: 'expenses')]
+    private ?Capital $capital = null;
+
+    #[ORM\Column]
+    private ?bool $archived = null;
+
+    #[ORM\OneToOne(targetEntity: Projects::class)]
+    #[ORM\JoinColumn(name: "project_id", referencedColumnName: "id")]
+    private ?Projects $project = null;
 
     #[ORM\PrePersist]
     public function prePersist(): void
@@ -51,7 +72,7 @@ class Expenses
         return $this->dateE;
     }
 
-    public function setDateE(\DateTimeInterface $dateE): static
+    public function setDateE(\DateTimeInterface $dateE): self
     {
         $this->dateE = $dateE;
 
@@ -63,7 +84,7 @@ class Expenses
         return $this->Type;
     }
 
-    public function setType(string $Type): static
+    public function setType(string $Type): self
     {
         $this->Type = $Type;
 
@@ -75,7 +96,7 @@ class Expenses
         return $this->QuantityE;
     }
 
-    public function setQuantityE(float $QuantityE): static
+    public function setQuantityE(float $QuantityE): self
     {
         $this->QuantityE = $QuantityE;
 
@@ -87,7 +108,7 @@ class Expenses
         return $this->coast;
     }
 
-    public function setCoast(float $coast): static
+    public function setCoast(float $coast): self
     {
         $this->coast = $coast;
 
@@ -99,7 +120,7 @@ class Expenses
         return $this->Description;
     }
 
-    public function setDescription(string $Description): static
+    public function setDescription(string $Description): self
     {
         $this->Description = $Description;
 
@@ -111,21 +132,74 @@ class Expenses
         return $this->Totalamount;
     }
 
-    public function setTotalAmount(float $Total_amount): static
+    public function setTotalAmount(float $Total_amount): self
     {
         $this->Totalamount = $Total_amount;
 
         return $this;
     }
 
-    public function getMaterials(): ?Materials
+    public function getProduct(): ?Products
     {
-        return $this->materials;
+        return $this->product;
     }
 
-    public function setMaterials(?Materials $materials): static
+    public function setProduct(?Products $product): self
     {
-        $this->materials = $materials;
+        $this->product = $product;
+
+        return $this;
+    }
+
+    public function getSupplier(): ?Supplier
+    {
+        return $this->supplier;
+    }
+
+    public function setSupplier(?Supplier $supplier): self
+    {
+        $this->supplier = $supplier;
+
+        return $this;
+    }
+
+    public function getCapital(): ?Capital
+    {
+        return $this->capital;
+    }
+
+    public function setCapital(?Capital $capital): self
+    {
+        $this->capital = $capital;
+
+        return $this;
+    }
+
+    public function isArchived(): ?bool
+    {
+        return $this->archived;
+    }
+
+    public function setArchived(bool $archived): self
+    {
+        $this->archived = $archived;
+
+        return $this;
+    }
+
+    public function toggleArchived(): void
+    {
+        $this->archived = !$this->archived;
+    }
+
+    public function getProject(): ?Projects
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Projects $project): self
+    {
+        $this->project = $project;
 
         return $this;
     }

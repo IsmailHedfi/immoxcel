@@ -2947,6 +2947,20 @@ textarea.form-control-lg {
   margin-bottom: 0.125rem;
 }
 
+.alert {
+  font-size: 14px;
+  /* Adjust the font size */
+  padding: 10px 20px;
+  /* Adjust the padding */
+  margin-bottom: 20px;
+  /* Adjust the margin bottom */
+  border: 1px solid transparent;
+  /* Add border */
+  border-radius: 5px;
+  /* Add border radius */
+}
+
+
 .form-check .form-check-input {
   float: left;
   margin-left: -1.73em;
@@ -20628,6 +20642,7 @@ fieldset:disabled .btn {
 .btn.bg-gradient-light .btn.bg-outline-light {
   border: 1px solid #e9ecef;
 }
+
 
 .btn-light:not(:disabled):not(.disabled).active,
 .btn-light:not(:disabled):not(.disabled):active,
