@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello LeavesController!{% endblock %}
+
+{% block body %}
+<div
+    class="card">
+    <!--This card is for the add project popup-->
+    <div class="formPopup" id="popupForm" class="modal">
+      <form action="/action_page.php" class="formContainer">
+        <button type="button" class="x button" onclick="closeForm()">x</button>
+        <h2>Create a project</h2>
+        <input type="text" class="form-control" id="name" placeholder="New project name.." name="name" required>
+        <table>
+          <tr>
+            <td>
+              <button type="submit" class="btn">Create</button>
+            </td>
+            <td>
+              <button type="button" class="btn cancel" onclick="closeForm()">Cancel</button>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+    <!--add project popup end-->
+  </div>
+
+{% endblock %}

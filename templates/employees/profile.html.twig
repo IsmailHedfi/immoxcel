@@ -1,0 +1,235 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+	<body class="g-sidenav-show bg-gray-100">
+
+
+		<div
+			class="main-content position-relative max-height-vh-100 h-100">
+
+
+			<!-- End Navbar -->
+			<div class="container-fluid py-4">
+				<div class="row">
+					<div class="col-md-8">
+
+						<div class="card">
+							<div class="card-header pb-0">
+								<div class="d-flex align-items-center">
+
+									<p class="mb-0">Vue Profile</p>
+									<a class="btn btn-primary btn-sm ms-auto m-0" href="{{path('app_employee_edit',{'id': id}) }}">UPDATE</a>
+
+								</div>
+								<div class="card-header pb-0 px-3"></div>
+							</div>
+							<div class="card-body">
+								<p class="text-uppercase text-sm">User Information</p>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">First name</label>
+											<br>
+											{{ formAdd.vars.data.EmpName}}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">Last name</label>
+											<br>
+											{{ formAdd.vars.data.EmpLastName}}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">Cin</label>
+											<br>
+											{{ formAdd.vars.data.EmpCin}}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">Sex</label>
+											<br>
+											{{ formAdd.vars.data.EmpSex}}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">Birthday Date</label>
+											<br>
+											{{ formAdd.vars.data.birthDate|date('Y-m-d') }}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">Email address</label>
+											<br>
+											{{ formAdd.vars.data.EmpEmail}}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">Function</label>
+											<br>
+											{{ formAdd.vars.data.EmpFunction}}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">Hire Date</label>
+											<br>
+											{{ formAdd.vars.data.hireDate|date('Y-m-d') }}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">End Contract Date</label>
+											<br>
+											{{ formAdd.vars.data.endContractDate|date('Y-m-d') }}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">Leave days allowed</label>
+											<br>
+											{{ formAdd.vars.data.allowedLeaveDays }}
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">Contract type</label>
+											<br>
+											{{ formAdd.vars.data.contractType}}
+										</div>
+									</div>
+
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">CV</label>
+											<br>
+											{{ formAdd.vars.data.Empcv}}
+										</div>
+									</div>
+								</div>
+								<hr class="horizontal dark">
+								<p class="text-uppercase text-sm">Contact Information</p>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">Address</label>
+											<br>
+											{{ formAdd.vars.data.EmpAddress}}
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<label for="example-text-input" class="form-control-label">Phone Number</label>
+											<br>
+											{{ formAdd.vars.data.EmpPhone}}
+										</div>
+									</div>
+								</div>
+								<hr class="horizontal dark">
+
+							</div>
+						</div>
+					</div>
+
+					<!--
+																																-->
+					<div class="col-md-4">
+						<div class="card">
+							<div class="card-header pb-0 px-3">
+								<h6 class="mb-0">List of leaves</h6>
+
+							</div>
+
+							{% for leave in leaves %}
+								<div class="card-body pt-4 p-3">
+									<ul class="list-group">
+										<li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+											<div class="d-flex flex-column">
+												<h6 class="mb-3 text-sm">{{leave.getId()}}</h6>
+												<span class="mb-2 text-xs">Type:
+													<span class="text-dark font-weight-bold ms-sm-2">{{leave.getLeaveType()}}</span>
+												</span>
+												<span class="mb-2 text-xs">Description:
+													<span class="text-dark font-weight-bold ms-sm-2">{{leave.getLeaveDescription()}}</span>
+												</span>
+												<span class="mb-2 text-xs">Starting date:
+													<span class="text-dark ms-sm-2 font-weight-bold">{{leave.getStartDate()| date('Y-m-d') }}</span>
+												</span>
+												<span class="text-xs">Finishing date:
+													<span class="text-dark ms-sm-2 font-weight-bold">{{leave.getFinishDate()| date('Y-m-d') }}</span>
+												</span>
+											</div>
+											<div class="ms-auto text-end">
+												{% if leave.getStatus() != "Pending" %}
+													<a class="btn btn-link text-danger text-gradient px-3 mb-0 disabled" href="">
+														<i class="far fa-trash-alt me-2" aria-hidden="true"></i>Delete</a>
+													<a class="btn btn-link text-dark px-3 mb-0 disabled " href="">
+														<i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
+												{% else %}
+													<a class="btn btn-link text-danger text-gradient px-3 mb-0" href="{{path('app_leave_delete',{'id': leave.getId()}) }}" disabled>
+														<i class="far fa-trash-alt me-2" aria-hidden="true"></i>Delete</a>
+													<a class="btn btn-link text-dark px-3 mb-0" href="{{path('app_leave_edit',{'id': leave.getId()}) }}">
+														<i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
+												{% endif %}
+											</div>
+										</li>
+
+									</ul>
+								</div>
+							{% else %}
+								no leaves found
+
+							{% endfor %}
+						</div>
+					</div>
+					<!--
+																																	-->
+				</div>
+
+			</div>
+			<footer class="footer pt-3  ">
+				<div class="container-fluid">
+					<div class="row align-items-center justify-content-lg-between">
+						<div class="col-lg-6 mb-lg-0 mb-4">
+							<div class="copyright text-center text-sm text-muted text-lg-start">
+								©
+								<script>
+									document.write(new Date().getFullYear())
+								</script>,
+																								                made with
+								<i class="fa fa-heart"></i>
+								by
+								<a href="/login" class="font-weight-bold" target="_blank">ImmoXcel</a>
+
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<ul class="nav nav-footer justify-content-center justify-content-lg-end">
+								<li class="nav-item">
+									<a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">ImmoXcel</a>
+								</li>
+								<li class="nav-item">
+									<a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank">About Us</a>
+								</li>
+								<li class="nav-item">
+									<a href="https://www.creative-tim.com/blog" class="nav-link text-muted" target="_blank">Blog</a>
+								</li>
+								<li class="nav-item">
+									<a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted" target="_blank">License</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</footer>
+
+		</div>
+	</body>
+
+{% endblock %}

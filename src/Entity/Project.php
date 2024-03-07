@@ -18,39 +18,43 @@ class Project
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank (message : "Project Name required")]
+    #[Assert\NotBlank(message: "Project Name required")]
     private ?string $projectName = null;
-   
+
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Assert\NotBlank(message : "Predicted start date must be a valid date")]
+    #[Assert\NotBlank(message: "Predicted start date must be a valid date")]
     private ?\DateTimeInterface $date_pred_start = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Assert\NotBlank(message : "Predicted finish date must be a valid date")]
-    #[Assert\GreaterThan(propertyPath : "date_pred_start", message : "Predicted finish date must be greater than the predicted start date")]
+    #[Assert\NotBlank(message: "Predicted finish date must be a valid date")]
+    #[Assert\GreaterThan(propertyPath: "date_pred_start", message: "Predicted finish date must be greater than the predicted start date")]
     private ?\DateTimeInterface $date_pred_finish = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Assert\NotBlank(message : "Completion date must be a valid date")]
+    #[Assert\NotBlank(message: "Completion date must be a valid date")]
     private ?\DateTimeInterface $date_completion = null;
 
     #[ORM\Column(nullable: true)]
-    #[Assert\Type(type : "float", message : "Budget must be a valid number")]
-    #[Assert\PositiveOrZero(message : "Budget cannot be negative")]
+    #[Assert\Type(type: "float", message: "Budget must be a valid number")]
+    #[Assert\PositiveOrZero(message: "Budget cannot be negative")]
     private ?float $budget = null;
 
     #[ORM\Column(nullable: true)]
-    #[Assert\Type(type : "float", message : "Actual cost must be a valid number")]
-    #[Assert\PositiveOrZero(message : "Actual cost cannot be negative")]
+    #[Assert\Type(type: "float", message: "Actual cost must be a valid number")]
+    #[Assert\PositiveOrZero(message: "Actual cost cannot be negative")]
     private ?float $actual_cost = null;
 
-    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project')]
+    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project', orphanRemoval: true)]
     private Collection $listTasks;
+
+    #[ORM\ManyToMany(targetEntity: Employees::class, mappedBy: 'listProjects')]
+    private Collection $listEmployees;
 
     public function __construct()
     {
         $this->listTasks = new ArrayCollection();
+        $this->listEmployees = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -162,5 +166,32 @@ class Project
     public function __toString(): string
     {
         return $this->getProjectName();
+    }
+
+    /**
+     * @return Collection<int, Employees>
+     */
+    public function getListEmployees(): Collection
+    {
+        return $this->listEmployees;
+    }
+
+    public function addListEmployee(Employees $listEmployee): static
+    {
+        if (!$this->listEmployees->contains($listEmployee)) {
+            $this->listEmployees->add($listEmployee);
+            $listEmployee->addListProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeListEmployee(Employees $listEmployee): static
+    {
+        if ($this->listEmployees->removeElement($listEmployee)) {
+            $listEmployee->removeListProject($this);
+        }
+
+        return $this;
     }
 }
