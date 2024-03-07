@@ -76,7 +76,7 @@ class ProjectsController extends AbstractController
             $en->flush();
             return $this->redirectToRoute('app_projects');
         }
-        return $this->renderForm('projects/editproject.html.twig', ['form' => $form , 'project' => $project]);
+        return $this->renderForm('projects/editproject.html.twig', ['form' => $form, 'project' => $project]);
     }
 
     #[Route('/projects/delete/{id}', name: 'app_projects_delete')]
@@ -86,5 +86,10 @@ class ProjectsController extends AbstractController
         $en->remove($project);
         $en->flush();
         return $this->redirectToRoute('app_projects');
+    }
+    #[Route('/projects/calendar', name: 'app_calenar')]
+    public function showCalendar(): Response
+    {
+        return $this->renderForm('projects/calendarAPI.html.twig');
     }
 }

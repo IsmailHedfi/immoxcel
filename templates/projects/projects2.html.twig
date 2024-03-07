@@ -140,7 +140,6 @@ document.getElementById("popupForm").style.display = "block";
 function closeForm() {
 document.getElementById("popupForm").style.display = "none";
 }
-
 							</script>
 						</div>
 					</div>
@@ -163,8 +162,9 @@ document.getElementById("popupForm").style.display = "none";
 																	{{ project.projectName }}
 																</h5>
 																<a href="{{ path('project_tasks', {'projectId': project.id}) }}">
-																	<p class="mb-0">
-																		<span class="text-success text-sm font-weight-bolder">{{ project.budget }}</span>
+																	<p
+																		class="mb-0">
+																		{# <span class="text-success text-sm font-weight-bolder">{{ project.budget }}</span> #}
 																		Tasks
 																	</p>
 																</a>
@@ -197,7 +197,7 @@ document.getElementById("popupForm").style.display = "none";
 						<script>
 							document.write(new Date().getFullYear())
 						</script>,
-																																																																																																																																																																																																																																																																																																																																																																				                made with
+																																																																																																																																																																																																																																																																																																																																																																										                made with
 						<i class="fa fa-heart"></i>
 						by
 						<a href="/login" class="font-weight-bold" target="_blank">immoxcel</a>
@@ -256,26 +256,26 @@ document.getElementById("popupForm").style.display = "none";
 		</div>
 		<!--add project popup end-->
 		{# <div class="formPopup" id="popupForm">
-																							<div class="card">
-																								<form action="{{ path('app_projects') }}" method="POST" class="formContainer">
-																									<button type="button" class="x button" onclick="closeForm()">x</button>
-																									<div class="card-header">
-																										<h2 class="card-title">Create a project</h2>
+																									<div class="card">
+																										<form action="{{ path('app_projects') }}" method="POST" class="formContainer">
+																											<button type="button" class="x button" onclick="closeForm()">x</button>
+																											<div class="card-header">
+																												<h2 class="card-title">Create a project</h2>
+																											</div>
+																											<div class="card-body">
+																												{{ form_start(form) }}
+																												<div class="mb-3">
+																													{{ form_row(form.projectName) }}
+																												</div>
+																												<div class="d-grid gap-2">
+																													<button type="submit" class="btn btn-primary">Create</button>
+																													<button type="button" class="btn btn-secondary" onclick="closeForm()">Cancel</button>
+																												</div>
+																												{{ form_end(form) }}
+																											</div>
+																										</form>
 																									</div>
-																									<div class="card-body">
-																										{{ form_start(form) }}
-																										<div class="mb-3">
-																											{{ form_row(form.projectName) }}
-																										</div>
-																										<div class="d-grid gap-2">
-																											<button type="submit" class="btn btn-primary">Create</button>
-																											<button type="button" class="btn btn-secondary" onclick="closeForm()">Cancel</button>
-																										</div>
-																										{{ form_end(form) }}
-																									</div>
-																								</form>
-																							</div>
-																						</div> #}
+																								</div> #}
 
 	</main>
 {% endblock %}

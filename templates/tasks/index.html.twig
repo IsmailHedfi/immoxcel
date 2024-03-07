@@ -149,7 +149,7 @@ document.getElementById("popupForm").style.display = "none";
 									<div class="task mb-3 position-relative" data-task-id="{{ task.id }}">
 										<a href="{{ path('app_task_details', {'id': task.id}) }}">
 											<form method="post" action="{{ path('app_tasks_delete', {'id': task.id}) }}">
-												<button type="submit" class="delete-btn" style="display:none">x</button>
+												<button type="submit" class="delete-btn" >x</button>
 											</form>
 											{{ task.taskTitle }}
 											<!-- Additional task details if needed -->
@@ -173,7 +173,7 @@ document.getElementById("popupForm").style.display = "none";
 									<div class="task mb-3 position-relative" data-task-id="{{ task.id }}">
 										<a href="{{ path('app_task_details', {'id': task.id}) }}">
 											<form method="post" action="{{ path('app_tasks_delete', {'id': task.id}) }}">
-												<button type="submit" class="delete-btn" style="display:none">x</button>
+												<button type="submit" class="delete-btn">x</button>
 											</form>
 											{{ task.taskTitle }}
 											<!-- Additional task details if needed -->
@@ -196,7 +196,7 @@ document.getElementById("popupForm").style.display = "none";
 									<div class="task mb-3 position-relative" data-task-id="{{ task.id }}">
 										<a href="{{ path('app_task_details', {'id': task.id}) }}">
 											<form method="post" action="{{ path('app_tasks_delete', {'id': task.id}) }}">
-												<button type="submit" class="delete-btn" style="display:none">x</button>
+												<button type="submit" class="delete-btn" >x</button>
 											</form>
 											{{ task.taskTitle }}
 											<!-- Additional task details if needed -->
