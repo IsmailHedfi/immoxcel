@@ -25,18 +25,19 @@ use Symfony\Component\Notifier\TexterInterface;
 use Symfony\Component\Notifier\Message\SmsMessage;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
-
-
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use TCPDF; // Import TCPDF class
+use Twilio\Rest\Proxy\V1\Service\SessionInstance;
 
 class ExpensesController extends AbstractController
 {
     #[Route('/expenses', name: 'app_expensesdis')]
-    public function index(ExpensesRepository $rep, Request $request): Response
+    public function index(ExpensesRepository $rep, Request $request, SessionInterface $session): Response
     {
-
+        $username = $session->get('username');
         $searchData = new SearchData();
         $form = $this->createForm(SearchType::class, $searchData);
         $form->handleRequest($request);
@@ -48,7 +49,8 @@ class ExpensesController extends AbstractController
             return $this->render('expenses/DisplayExpenses.html.twig', [
                 'form' => $form->createView(),
                 'expenses' => $expenses,
-                'searchQuery' => $searchData->q // Pass the search query string to the template
+                'searchQuery' => $searchData->q,
+                'username' => $username // Pass the search query string to the template
             ]);
         }
 
@@ -56,32 +58,11 @@ class ExpensesController extends AbstractController
         return $this->render('expenses/DisplayExpenses.html.twig', [
             'form' => $form->createView(),
             'expenses' => $rep->orderByDest(),
+            'username' => $username
         ]);
     }
 
-    #[Route('/smssss', name: 'app_home')]
-    public function smsdispl(): Response
-    {
-        return $this->render('expenses/test.html.twig', ['smsSent' => false]);
-    }
 
-    //Gestion de l'envoie du sms
-    // #[Route('/sendSms', name: 'send_sms', methods: 'POST')]
-    public function sendSms(Request $request, SmsGenerator $smsGenerator): Response
-    {
-        $number = $request->request->get('number');
-
-        $name = $request->request->get('name');
-
-        $text = $request->request->get('text');
-
-        $number_test = $_ENV['TWILIO_TO_NUMBER']; // Numéro vérifier par twilio. Un seul numéro autorisé pour la version de test.
-
-        //Appel du service
-        $smsGenerator->sendSms($number_test, $name, $text);
-
-        return $this->render('expenses/test.html.twig', ['smsSent' => true]);
-    }
     public function sendSms2(SmsGenerator $smsGenerator, $number, $name, $text)
     {
         $number_test = $_ENV['TWILIO_TO_NUMBER']; // Numéro vérifier par twilio. Un seul numéro autorisé pour la version de test.
@@ -89,8 +70,9 @@ class ExpensesController extends AbstractController
         $smsGenerator->sendSms($number_test, $name, $text);
     }
     #[Route('/dashboard/expenses', name: 'app_addexpenses')]
-    public function addexpensese(Request $request, ExpensesRepository $rep, SmsGenerator $twilioService, MailerInterface $mailer)
+    public function addexpensese(Request $request, ExpensesRepository $rep, SmsGenerator $twilioService, MailerInterface $mailer, SessionInterface $session)
     {
+        $username = $session->get('username');
         $smsGenerator = new SmsGenerator();
         $expenses = new Expenses();
         $form = $this->CreateForm(ExpensesType::class, $expenses);
@@ -162,11 +144,12 @@ class ExpensesController extends AbstractController
             return $this->redirectToRoute('app_expensesdis');
         }
         // si le formulaire n'est pas valide ou il n'a pas submitted on va le retourner a la vue de l'ajout pour ajouter une autre fois 
-        return $this->render('expenses/add.html.twig', ['f' => $form->createView()]);
+        return $this->render('expenses/add.html.twig', ['f' => $form->createView(), 'username' => $username]);
     }
     #[Route('/dashboard/edditTransaction/{id}', name: 'app_editTransaction')]
-    public function EditEpnses(ExpensesRepository $rep, $id, Request $request)
+    public function EditEpnses(ExpensesRepository $rep, $id, Request $request, SessionInterface $session)
     {
+        $username = $session->get('username');
         $expenses = $rep->find($id);
         if (!$expenses) {
             throw $this->createNotFoundException('The Transaction with id ' . $id . ' does not exist');
@@ -227,7 +210,7 @@ class ExpensesController extends AbstractController
             return $this->redirectToRoute('app_expensesdis');
         }
         // si le formulaire n'est pas valide ou il n'a pas submitted on va le retourner a la vue de l'ajout pour ajouter une autre fois 
-        return $this->render('expenses/add.html.twig', ['f' => $form->createView()]);
+        return $this->render('expenses/add.html.twig', ['f' => $form->createView(), 'username' => $username]);
     }
     #[Route('/dashboard/DeleteExp/{id}', name: 'app_deltexp')]
     public function DeleteEpe(ExpensesRepository $rep, $id)
@@ -245,6 +228,7 @@ class ExpensesController extends AbstractController
     #[Route('/dashboard/archiveExp/{id}', name: 'app_archive_expenses')]
     public function archiveExp(ExpensesRepository $rep, $id): Response
     {
+
         $expenses = $rep->find($id);
         if (!$expenses) {
             throw $this->createNotFoundException('The Transaction with id ' . $id . ' does not exist');
@@ -258,11 +242,13 @@ class ExpensesController extends AbstractController
         return $this->redirectToRoute('app_dashboard_page');
     }
     #[Route('/dashboard/archive', name: 'app_archiveyo')]
-    public function archived(ExpensesRepository $rep): Response
+    public function archived(ExpensesRepository $rep, SessionInterface $session): Response
     {
+        $username = $session->get('username');
         $expenses = $rep->findNotActiveTransactions();
         return $this->render('expenses/archive.html.twig', [
-            'expenses' => $expenses
+            'expenses' => $expenses,
+            'username' => $username
         ]);
     }
 
@@ -311,28 +297,22 @@ class ExpensesController extends AbstractController
         ]);
     }
     #[Route('/dashboard/desc', name: 'app_desc', methods: 'GET')]
-    public function order_By_Dest(Request $request, ExpensesRepository $expensesRepository): Response
+    public function order_By_Dest(Request $request, ExpensesRepository $expensesRepository, SessionInterface $session): Response
     {
+        $username = $session->get('username');
         $expenseByDest = $expensesRepository->orderByDest();
 
         return $this->render('expenses/DisplayExpenses.html.twig', [
             'expenses' => $expenseByDest,
+            'username' => $username
         ]);
     }
-    #[Route('/dashboard/expensess', name: 'app_income', methods: 'GET')]
 
-    public function Income(Request $request, ExpensesRepository $expensesRepository): Response
-    {
-        $VoyageByDest = $expensesRepository->Income();
-
-        return $this->render('expenses/DisplayExpenses.html.twig', [
-            'expenses' => $VoyageByDest,
-        ]);
-    }
 
     #[Route('/expenses/hell/{id}', name: 'app_exHell')]
-    public function hell(ExpensesRepository $expenRep, $id): Response
+    public function hell(ExpensesRepository $expenRep, $id, SessionInterface $session): Response
     {
+        $username = $session->get('username');
         $expenses = $expenRep->find($id);
 
         return $this->render('expenses/Hello.html.twig', [
@@ -340,6 +320,7 @@ class ExpensesController extends AbstractController
             'Type' => $expenses->getType(),
             'Description' => $expenses->getDescription(),
             'Totalamount' => $expenses->getTotalAmount(),
+            'username' => $username
 
         ]);
     }
@@ -412,5 +393,29 @@ class ExpensesController extends AbstractController
             ->text('Hey ! New transaction yoyo ');
         $mailer->send($email);
         return new Response('Email was sent');
+    }
+
+    #[Route('/dashboard/hell', name: 'app_dashboard_page')]
+    public function indexdashboard(ExpensesRepository $rep, ChartBuilderInterface $chartBuilder, CapitalRepository $capitalrep, SessionInterface $session): Response
+    {
+        $username = $session->get('username');
+        $cap = $this->getDoctrine()->getRepository(Capital::class)->findAll();
+        $expenses = $rep->findActiveTransactions();
+        $capitals = $capitalrep->findAll();
+        $expenses = $rep->findActiveTransactions();
+        foreach ($capitals as $capital) {
+            $CapExpenses = $capital->getExpensess();
+            $CapProfits = $capital->getProfits();
+            $CapSalary = $capital->getSalary();
+            // Affichage de stat 
+            return $this->render('expenses/yoyo.html.twig', [
+                'expenses' => $expenses,
+                'cap' => $cap,
+                'CapExpenses' => $CapExpenses,
+                'CapProfits' => $CapProfits,
+                'CapSalary' => $CapSalary,
+                'username' => $username
+            ]);
+        }
     }
 }

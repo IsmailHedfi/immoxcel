@@ -11,30 +11,32 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class MailController extends AbstractController
 {
     #[Route('/mail', name: 'app_mail')]
-    public function index(Request $request): Response
+    public function index(Request $request, SessionInterface $session): Response
     {
+        $username = $session->get('username');
         $form = $this->createForm(AddMailType::class);
-    $form->handleRequest($request);
+        $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        $formData = $form->getData();
-        $email = (new Email())
-            ->from($formData['senderEmail'])
-            ->to($formData['recipientEmail'])
-            ->subject($formData['subject'])
-            ->html($formData['message']);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formData = $form->getData();
+            $email = (new Email())
+                ->from($formData['senderEmail'])
+                ->to($formData['recipientEmail'])
+                ->subject($formData['subject'])
+                ->html($formData['message']);
 
-        $transport = new GmailSmtpTransport('chiboub.ghalia@gmail.com', 'twsv pulq brpo nfes');
-        $mailer = new Mailer($transport);
-        
-        $mailer->send($email);
-        return $this->redirectToRoute('app_employees'); // Redirect to a success page after sending the email
-    
-}
-        return $this->render('mail/index.html.twig', ['formAdd'=>$form->createView()]);
+            $transport = new GmailSmtpTransport('chiboub.ghalia@gmail.com', 'twsv pulq brpo nfes');
+            $mailer = new Mailer($transport);
+
+            $mailer->send($email);
+            return $this->redirectToRoute('app_employees'); // Redirect to a success page after sending the email
+
+        }
+        return $this->render('mail/index.html.twig', ['formAdd' => $form->createView(), 'username' => $username]);
     }
 }

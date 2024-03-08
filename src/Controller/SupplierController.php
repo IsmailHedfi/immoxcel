@@ -15,13 +15,15 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Notifier\TexterInterface;
 use Symfony\Component\Notifier\Message\SmsMessage;
 use App\Service\SmsGenerator;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SupplierController extends AbstractController
 {
 
     #[Route('/dashboard/Supplierr', name: 'app_supplier')]
-    public function DisplaySupplier(SupplierRepository $rep, Request $request): Response
+    public function DisplaySupplier(SupplierRepository $rep, Request $request, SessionInterface $session): Response
     {
+        $username = $session->get('username');
         $searchData = new SearchData();
         $form = $this->createForm(SearchType::class, $searchData);
         $form->handleRequest($request);
@@ -31,18 +33,21 @@ class SupplierController extends AbstractController
             return $this->render('supplier/index.html.twig', [
                 'form' => $form->createView(),
                 'supplier' => $supplier,
-                'searchQuery' => $searchData->q // Pass the search query string to the template
+                'searchQuery' => $searchData->q,
+                'username' => $username // Pass the search query string to the template
             ]);
         }
         return $this->render('supplier/index.html.twig', [
             'form' => $form->createView(),
             'supplier' => $rep->orderByDest(),
+            'username' => $username
         ]);
     }
 
     #[Route('/dashboard/addsupplier', name: 'app_add_supplier')]
-    public function addsupplier(Request $request)
+    public function addsupplier(Request $request, SessionInterface $session)
     {
+        $username = $session->get('username');
         $supplier = new  Supplier();
         $form = $this->CreateForm(SupplierType::class, $supplier);
 
@@ -57,11 +62,12 @@ class SupplierController extends AbstractController
             return $this->redirectToRoute('app_supplier', ['smsSent' => true]);
         }
         // si le formulaire n'est pas valide ou il n'a pas submitted on va le retourner a la vue de l'ajout pour ajouter une autre fois 
-        return $this->render('supplier/addSup.html.twig', ['f' => $form->createView(), 'smsSent' => false]);
+        return $this->render('supplier/addSup.html.twig', ['f' => $form->createView(), 'smsSent' => false, 'username' => $username]);
     }
     #[Route('/dashboard/edditSupplier/{id}', name: 'app_edit_supplier')]
-    public function EditSupplier(SupplierRepository $rep, $id, Request $request)
+    public function EditSupplier(SupplierRepository $rep, $id, Request $request, SessionInterface $session)
     {
+        $username = $session->get('username');
         $supplier = $rep->find($id);
         if (!$supplier) {
             throw $this->createNotFoundException('The sell purchase with id ' . $id . ' does not exist');
@@ -78,7 +84,7 @@ class SupplierController extends AbstractController
             $this->addFlash('success', 'Supplier Edited successfully.');
 
 
-            return $this->redirectToRoute('app_supplier', ['Edit' => true]);
+            return $this->redirectToRoute('app_supplier', ['Edit' => true, 'username' => $username]);
         }
         // si le formulaire n'est pas valide ou il n'a pas submitted on va le retourner a la vue de l'ajout pour ajouter une autre fois 
         return $this->render('supplier/addsup.html.twig', ['f' => $form->createView(), ['Edit' => false]]);
@@ -97,8 +103,9 @@ class SupplierController extends AbstractController
         return $this->redirectToRoute('app_supplier');
     }
     #[Route('/supplier/smonotif/{id}', name: 'heloosmo', methods: ['GET', 'POST'])]
-    public function sendSms(Request $request, SmsGenerator $smsGenerator, SupplierRepository $rep): Response
+    public function sendSms(Request $request, SmsGenerator $smsGenerator, SupplierRepository $rep, SessionInterface $session): Response
     {
+        $username = $session->get('username');
         $form = $this->createForm(SmsType::class); // Create the form
         $form->handleRequest($request); // Handle form submission
 
@@ -122,7 +129,7 @@ class SupplierController extends AbstractController
 
         // Render the form template
         return $this->render('supplier/smsSend.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form->createView(), 'username' => $username
         ]);
     }
 }

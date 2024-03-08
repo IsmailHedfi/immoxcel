@@ -13,13 +13,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class TasksController extends AbstractController
 {
     #[Route('/tasks', name: 'app_tasks')]
-    public function index(Request $request): Response
+    public function index(Request $request, SessionInterface $session): Response
     {
+        $username = $session->get('username');
         // Create a new project instance
         $task = new Task();
 
@@ -45,12 +46,14 @@ class TasksController extends AbstractController
         return $this->render('tasks/index.html.twig', [
             'form' => $form->createView(),
             'tasks' => $tasks,
+            'username' => $username
         ]);
     }
 
     #[Route('/Tasks/edit/{id}', name: 'app_tasks_edit')]
-    public function editTask($id, Request $request, EntityManagerInterface $entityManager, TaskRepository $taskRepository): Response
+    public function editTask($id, Request $request, EntityManagerInterface $entityManager, TaskRepository $taskRepository, SessionInterface $session): Response
     {
+        $username = $session->get('username');
         $task = $taskRepository->find($id);
 
         if (!$task) {
@@ -71,12 +74,14 @@ class TasksController extends AbstractController
         return $this->renderForm('tasks/edittask.html.twig', [
             'task' => $task,
             'form' => $form,
-            'project' => $project, // Pass the project to the template
+            'project' => $project,
+            'username' => $username // Pass the project to the template
         ]);
     }
     #[Route('/Tasks/details/{id}', name: 'app_task_details')]
-    public function detailsTask($id, TaskRepository $taskRepository): Response
+    public function detailsTask($id, TaskRepository $taskRepository, SessionInterface $session): Response
     {
+        $username = $session->get('username');
         $task = $taskRepository->find($id);
 
         if (!$task) {
@@ -89,7 +94,8 @@ class TasksController extends AbstractController
 
         return $this->renderForm('tasks/taskdetails.html.twig', [
             'project' => $project,
-            'task' => $task, // Pass the project to the template
+            'task' => $task,
+            'username' => $username // Pass the project to the template
         ]);
     }
 
@@ -112,8 +118,9 @@ class TasksController extends AbstractController
     }
 
     #[Route('/projects/{projectId}/tasks', name: 'project_tasks')]
-    public function projectTasks($projectId, Request $request, TaskRepository $taskRepository): Response
+    public function projectTasks($projectId, Request $request, TaskRepository $taskRepository, SessionInterface $session): Response
     {
+        $username = $session->get('username');
         // Retrieve the project by its ID
         $project = $this->getDoctrine()->getRepository(Project::class)->find($projectId);
 
@@ -149,6 +156,7 @@ class TasksController extends AbstractController
             'form' => $form->createView(),
             'project' => $project,
             'tasks' => $tasks,
+            'username' => $username
         ]);
     }
 
@@ -158,18 +166,18 @@ class TasksController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $taskId = $data['taskId']; // Get taskId instead of taskIds
         $status = $data['status'];
-    
+
         // Get the Doctrine entity manager
         $entityManager = $this->getDoctrine()->getManager();
-    
+
         // Fetch the task by its ID
         $task = $entityManager->getRepository(Task::class)->find($taskId);
-    
+
         // Update the status if the task is found
         if ($task) {
             $task->setTaskStatus($status);
             $entityManager->flush(); // Flush changes to synchronize with the database
-    
+
             // Return a JSON response indicating success
             return new JsonResponse(['message' => 'Task status updated successfully'], Response::HTTP_OK);
         } else {

@@ -13,6 +13,8 @@ use TCPDF;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class DepotController extends AbstractController
 {
@@ -24,30 +26,30 @@ class DepotController extends AbstractController
         ]);
     }
     #[Route('/adddepot', name: 'app_adddepot')]
-    public function adddepot(Request $request): Response
+    public function adddepot(Request $request, SessionInterface $session): Response
     {
+        $username = $session->get('username');
         $depot = new Depot();
-        $form=$this->createForm(DepotType::class,$depot);
+        $form = $this->createForm(DepotType::class, $depot);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid())
-        {
-            
+        if ($form->isSubmitted() && $form->isValid()) {
+
             $depot->setQuantityAvailable(0);
-            $em=$this->getDoctrine()->getManager();
-            $em->persist($depot);//add
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($depot); //add
             $em->flush();
             return $this->redirectToRoute('app_afficherdepot');
         }
-        return $this->render('depot/adddepot.html.twig', ['f'=>$form->createView()]);
-    }  
+        return $this->render('depot/adddepot.html.twig', ['f' => $form->createView(), 'username' => $username]);
+    }
     #[Route('/afficherdepot', name: 'app_afficherdepot')]
-    public function afficherdepot(Request $request): Response
+    public function afficherdepot(Request $request, SessionInterface $session): Response
     {
-         // Get all depots
+        $username = $session->get('username');
         $entityManager = $this->getDoctrine()->getManager();
         $query = $entityManager->getRepository(Depot::class)->createQueryBuilder('m')
             ->getQuery();
-    
+
         // Pagination
         $page = $request->query->getInt('page', 1);
         $limit = $request->query->getInt('limit', 5);
@@ -56,58 +58,55 @@ class DepotController extends AbstractController
             ->getQuery()
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit);
-    
+
         // Get paginated materials
         $depots = $paginator->getIterator();
-    
+
         // Get total count
         $totalCount = count($paginator);
-    
+
         // Calculate total pages
         $totalPages = ceil($totalCount / $limit);
-    
+
         return $this->render('depot/afficherdepot.html.twig', [
             'depots' => $depots,
             'totalPages' => $totalPages,
-            'page' => $page,
+            'page' => $page, 'username' => $username
         ]);
-    } 
+    }
     #[Route('/editdepot/{id}', name: 'app_editdepot')]
-    public function editdepot(Request $request,int $id): Response
+    public function editdepot(Request $request, int $id, SessionInterface $session): Response
     {
-        $depots =$this->getDoctrine()->getManager()->getRepository(Depot::class)->find($id);
-        $form=$this->createForm(DepotType::class,$depots);
+        $username = $session->get('username');
+        $depots = $this->getDoctrine()->getManager()->getRepository(Depot::class)->find($id);
+        $form = $this->createForm(DepotType::class, $depots);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid())
-        {
-            $limit=$form->get('LimitStock')->getData();
-            if($limit >= $depots->getQuantityAvailable())
-            {
-                $em=$this->getDoctrine()->getManager();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $limit = $form->get('LimitStock')->getData();
+            if ($limit >= $depots->getQuantityAvailable()) {
+                $em = $this->getDoctrine()->getManager();
                 $em->flush();
                 return $this->redirectToRoute('app_afficherdepot');
-            }
-            else
-            {
+            } else {
                 $form->get('LimitStock')->addError(new FormError('Limit Stock is below the quantity of materials in the Depot'));
             }
         }
-        return $this->render('depot/editdepot.html.twig', ['f'=>$form->createView()]);
+        return $this->render('depot/editdepot.html.twig', ['f' => $form->createView(), 'username' => $username]);
     }
-    #[Route('/deletedepot/{id}', name:'app_deletedepot')]
+    #[Route('/deletedepot/{id}', name: 'app_deletedepot')]
     public function deletedepot(int $id): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
         $depot = $entityManager->getRepository(Depot::class)->find($id);
         if (!$depot) {
-            throw $this->createNotFoundException('Depot non trouvé avec l\'identifiant: '.$id);
+            throw $this->createNotFoundException('Depot non trouvé avec l\'identifiant: ' . $id);
         }
-    
+
         $entityManager->remove($depot);
         $entityManager->flush();
-    
+
         return $this->redirectToRoute('app_afficherdepot');
-    } 
+    }
     #[Route('/generatePdf/{id}', name: 'depot_pdf_generate')]
     public function generatePdf($id): Response
     {
@@ -144,7 +143,7 @@ class DepotController extends AbstractController
             $pdf->Cell(45, 7, $col, 1, 0, 'C', 1);
         }
         $pdf->Ln();
-        
+
         // Afficher les données du tableau
         $pdf->SetFont('helvetica', '', 10);
         foreach ($depot->getMaterials() as $material) {
@@ -157,6 +156,4 @@ class DepotController extends AbstractController
             'Content-Type' => 'application/pdf',
         ]);
     }
-   
 }
-

@@ -93,6 +93,7 @@ class UserController extends AbstractController
                     $role = $user->getEmployee()->getEmpFunction();
                     $session->start();
                     $session->set('user', $user);
+                    $session->set('username', $user->getUsername());
                     $session->set('user_id', $user->getId());
                     $session->set('emp', $user->getEmployee()->getId());
                     $session->set('role', $user->getEmployee()->getEmpFunction());
@@ -104,8 +105,8 @@ class UserController extends AbstractController
                         return $this->redirectToRoute('app_projects');
                     } else if ($role == "Inventory_Manager") {
                         return $this->redirectToRoute('display_afficherdepot');
-                    } else if ($role != "Admin") {
-                        return $this->redirectToRoute('display_work');
+                    } else if ($role == "Financial_Manager") {
+                        return $this->redirectToRoute('app_dashboard_page');
                     }
                 }
             } else if (!$user) {

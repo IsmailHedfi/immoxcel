@@ -11,13 +11,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class ProjectsController extends AbstractController
 {
     #[Route('/projects', name: 'app_projects')]
-    public function index(Request $request): Response
+    public function index(Request $request, SessionInterface $session): Response
     {
+        $username = $session->get('username');
         // Create a new project instance
         $project = new Project();
 
@@ -43,12 +44,14 @@ class ProjectsController extends AbstractController
         return $this->render('projects/projects2.html.twig', [
             'form' => $form->createView(),
             'projects' => $projects,
+            'username' => $username
         ]);
     }
 
     #[Route('/Project/details/{id}', name: 'app_project_details')]
-    public function detailsTask($id, ProjectRepository $projectRepository): Response
+    public function detailsTask($id, ProjectRepository $projectRepository, SessionInterface $session): Response
     {
+        $username = $session->get('username');
         $project = $projectRepository->find($id);
 
         if (!$project) {
@@ -61,12 +64,14 @@ class ProjectsController extends AbstractController
         return $this->render('projects/projectdetails.html.twig', [
             'project' => $project,
             'tasks' => $tasks,
+            'username' => $username
         ]);
     }
 
     #[Route('/projects/edit/{id}', name: 'app_projects_edit')]
-    public function EditProject($id, Request $req, EntityManagerInterface $en, ProjectRepository $pR): Response
+    public function EditProject($id, Request $req, EntityManagerInterface $en, ProjectRepository $pR, SessionInterface $session): Response
     {
+        $username = $session->get('username');
         $project = $pR->find($id);
         $form = $this->createForm(ProjectType::class, $project);
         //$form->add('submit', SubmitType::class);
@@ -76,7 +81,7 @@ class ProjectsController extends AbstractController
             $en->flush();
             return $this->redirectToRoute('app_projects');
         }
-        return $this->renderForm('projects/editproject.html.twig', ['form' => $form, 'project' => $project]);
+        return $this->renderForm('projects/editproject.html.twig', ['form' => $form, 'project' => $project, 'username' => $username]);
     }
 
     #[Route('/projects/delete/{id}', name: 'app_projects_delete')]
@@ -88,8 +93,9 @@ class ProjectsController extends AbstractController
         return $this->redirectToRoute('app_projects');
     }
     #[Route('/projects/calendar', name: 'app_calenar')]
-    public function showCalendar(): Response
+    public function showCalendar(SessionInterface $session): Response
     {
-        return $this->renderForm('projects/calendarAPI.html.twig');
+        $username = $session->get('username');
+        return $this->renderForm('projects/calendarAPI.html.twig', ['username' => $username]);
     }
 }
